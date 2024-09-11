@@ -1,0 +1,71 @@
+#include<iostream>
+using namespace std;
+int main(){
+  char forward[80];
+  int forLeng=80;
+  for(int c=0; c<forLeng; c++){
+    forward[c]='\0';
+  }
+  cout<<"======================================================"<<endl;
+  cout<<" ____"<<endl;
+  cout<<"/ __\\"<<endl;
+  cout<<"| |_||"<<endl;
+  cout<<"| __/"<<endl;
+  cout<<"||"<<endl;
+  cout<<"||   alindrome"<<endl;
+  //input acceptor, always checking for ACceptable INput.(ACIN)
+  bool acin=false;
+  while(acin==false){
+    cout<<"Please input an 80-character statement for palindrome determinaton"<<endl;
+    cin.getline(forward,sizeof(forward));
+    acin=true;
+  }
+  //leng represents how many characters are left to process
+  //letang represents confirmed alphabetical characters.
+  int leng=80;
+  int letlang=0;
+  //'String' (character "Buffer" I think it's called) processor.
+  for(int let=0;let<leng;let++){
+    //If I reach a null char than the rest of the array is blank. so I exit the loop.
+    if(forward[let]!='\0'){
+      if(isalpha(forward[let])){
+	forward[let]=(char) tolower(forward[let]);
+	letlang++;
+      }else{
+	for(int fix=let; fix<leng; fix++){
+	  if (fix<leng-1){
+	    forward[fix]=forward[fix+1];
+	  }else{
+	    //If by some chance the array is super long I need to clean up.
+	    forward[leng-1]='\0';
+	  }
+	}
+	for(int c=0;c<leng;c++){
+	  cout<<forward[c];
+	}
+	cout<<endl;
+	let--;
+	leng=leng-1;
+      }
+    }else{
+      leng=let;
+    }
+  }
+  //reverse checker
+  for(int c=0; c<letlang; c++){
+    cout<<"letter ";
+    cout<<c;
+    cout<<" is ";
+    cout<<forward[c]<<endl;
+    cout<<"letter ";
+    cout<<letlang-(c+1);
+    cout<<" is ";
+    cout<<forward[letlang-(c+1)]<<endl;
+    if(forward[c]!=forward[letlang-(c+1)]){
+      cout<<"Not a palindrome."<<endl;
+      //return 0;
+    }
+  }
+  cout<<"Palindrome."<<endl;
+  return 0;
+}
