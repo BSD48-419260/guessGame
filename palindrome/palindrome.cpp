@@ -1,3 +1,10 @@
+/*
+Palindrome Detector, made to detect palindromes made from
+just alphanumerical characters
+By Elliott VanOrman
+9/11/2024
+May those who died on this day 23 years ago rest in peace
+*/
 #include<iostream>
 using namespace std;
 int main(){
