@@ -35,7 +35,7 @@ int main(){
   for(int let=0;let<leng;let++){
     //If I reach a null char than the rest of the array is blank. so I exit the loop.
     if(message[let]!='\0'){
-      if(isalpha(message[let])){
+      if(isalnum(message[let])){
 	message[let]=(char) tolower(message[let]);
 	letlang++;
       }else{
