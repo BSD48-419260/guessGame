@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 int main(){
-  char forward[80];
+  char message[80];
   int forLeng=80;
   for(int c=0; c<forLeng; c++){
     message[c]='\0';
