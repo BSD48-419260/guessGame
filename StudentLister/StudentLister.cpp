@@ -1,3 +1,10 @@
+/*
+ StudentLister Program
+ Inteded to work as a prototype database for students
+ students are structs kept in student* vector.
+ Made by Elliott VanOrman for Jason Galbraith's C++ C++/Data Structures Class
+ 10/3/2024
+ */
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -68,7 +75,6 @@ int main(){
 
 //student adding command
 void addStudent(){
-  //big mistake earlier, forgot to make student exist
   Student* newkid = new Student();
   bool acin=false;
   //name getting
@@ -184,6 +190,7 @@ void modStudent(){
     cin >> linpstring;
     lacin=true;
     bool acin=false;
+    //Commands should be pretty clear on what is being modified.
     if(cin.fail()){
       cout<<"I think you did something wrong. please try again."<<endl;
       cin.clear();
@@ -244,7 +251,6 @@ void modStudent(){
       }
       (**(StudentList.begin()+index)).ID=posid;
     }else if (strcmp(linpstring,"GPA")==0){
-      //Horus Heresy
       float newGPA;
       acin=false;
       while (acin==false){
@@ -262,7 +268,7 @@ void modStudent(){
       (**(StudentList.begin()+index)).GPA=newGPA;
     }else if (strcmp(linpstring,"NEVERMIND")==0){
       return;
-      //no command needed, just quit the loop.
+      //no command needed, just quit the function.
     }else{
       cout<<"Invalid Command."<<endl;
       lacin=false;
