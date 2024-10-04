@@ -19,19 +19,18 @@ struct Student{
   float GPA;
 };
 
-//main list
-vector<Student*> StudentList;
 
 //signature list
-void addStudent();
-void killStudent();
-void listStudents();
-void modStudent();
-int getIndex(int ID);
-int getID();
+void addStudent(vector <Student*> & StudentList);
+void killStudent(vector <Student*> & StudentList);
+void listStudents(vector <Student*> StudentList);
+void modStudent(vector <Student*> & StudentList);
+int getIndex(int ID,vector <Student*> & StudentList);
+int getID(vector <Student*> & StudentList);
 
 
 int main(){
+  vector <Student*> StudentList;
   //opening scrawl
   cout<<"==========================="<<endl;
   cout<<"Welcome to:"<<endl;
@@ -55,13 +54,13 @@ int main(){
       cin.clear();
       cin.ignore(100000,'\n');
     }else if (strcmp(inpstring,"ADD")==0){
-      addStudent();
+      addStudent(StudentList);
     }else if (strcmp(inpstring,"DELETE")==0){
-      killStudent();
+      killStudent(StudentList);
     }else if (strcmp(inpstring,"PRINT")==0){
-      listStudents();
+      listStudents(StudentList);
     }else if (strcmp(inpstring,"MODIFY")==0){
-      modStudent();
+      modStudent(StudentList);
     }else if (strcmp(inpstring,"QUIT")==0){
       notQuit=false;
       //no command needed, just quit the loop.
@@ -74,7 +73,7 @@ int main(){
 }
 
 //student adding command
-void addStudent(){
+void addStudent(vector <Student*> & StudentList){
   Student* newkid = new Student();
   bool acin=false;
   //name getting
@@ -123,8 +122,8 @@ void addStudent(){
   int posid;
   acin=false;
   while(acin==false){
-    posid=getID();
-    if(getIndex(posid)==-1){
+    posid=getID(StudentList);
+    if(getIndex(posid,StudentList)==-1){
       acin=true;
     }else{
       cout<<"A student with that ID already exists!"<<endl;
@@ -153,9 +152,9 @@ void addStudent(){
 }
 
 //student deleter. clears memory and removes from the list.
-void killStudent(){
-  listStudents();
-  int index = getIndex(getID());
+void killStudent(vector <Student*> & StudentList){
+  listStudents(StudentList);
+  int index = getIndex(getID(StudentList),StudentList);
   if (index == -1){
     cout<<"INVALID ID"<<endl;
     return;
@@ -168,7 +167,7 @@ void killStudent(){
 }
 
 //actual lister function. when called, prints all students
-void listStudents(){
+void listStudents(vector <Student*> StudentList){
   for(auto i=StudentList.begin(); i!=StudentList.end(); ++i){
     cout<<"Firstname: "<<(*(*i)).Firstname<<", Lastname: "<<(*(*i)).Lastname<<", ID: "<<(*(*i)).ID<<", GPA: "<<(round((*(*i)).GPA * 100))/100<<endl;
   }
@@ -176,9 +175,9 @@ void listStudents(){
 }
 
 //student modifier. because why not?
-void modStudent(){
-  listStudents();
-  int index = getIndex(getID());
+void modStudent(vector <Student*> & StudentList){
+  listStudents(StudentList);
+  int index = getIndex(getID(StudentList),StudentList);
   if(index==-1){
     cout<<"INVALID ID"<<endl;
   }
@@ -242,8 +241,8 @@ void modStudent(){
       int posid;
       acin=false;
       while(acin==false){
-	posid=getID();
-	if(getIndex(posid)==-1){
+	posid=getID(StudentList);
+	if(getIndex(posid,StudentList)==-1){
 	  acin=true;
 	}else{
 	  cout<<"A student with that ID already exists!"<<endl;
@@ -278,7 +277,7 @@ void modStudent(){
 }
 
 //for getting index of student in the list
-int getIndex(int ID){
+int getIndex(int ID, vector <Student*> & StudentList){
   for(auto i = StudentList.begin(); i!=StudentList.end(); ++i){
     int thisID = (*(*i)).ID;
     if (thisID==ID){
@@ -289,7 +288,7 @@ int getIndex(int ID){
 }
 
 //for getting IDs.
-int getID(){
+int getID(vector <Student*> & StudentList){
   bool acin=false;
   int ID;
   while (acin==false){
