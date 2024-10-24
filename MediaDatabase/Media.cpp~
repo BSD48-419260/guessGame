@@ -1,0 +1,60 @@
+#ifndef MEDIA_CPP 
+#define MEDIA_CPP
+
+#include <iostream>
+#include <cstring>
+#include "Media.h"
+
+using namespace std;
+Media::Media(){
+  title=new char[16];
+}
+
+Media::Media(char* newtitle, int newyear){
+  title=new char[16];
+  strcpy(title,newtitle);
+  year=newyear;
+}
+
+Media::~Media(){
+  delete title;
+  delete artist;
+  delete director;
+  delete publisher;
+  delete rating;
+  cout<<"Media Deleted"<<endl;
+}
+
+void Media::setto(Media copiedfrom){
+  title=copiedfrom.getTitle();
+  year=copiedfrom.getYear();
+  artist=copiedfrom.artist;
+  director=copiedfrom.director;
+  duration=copiedfrom.duration;
+  publisher=copiedfrom.publisher;
+  rating=copiedfrom.rating;  
+}
+
+char* Media::getTitle(){
+  return title;
+}
+
+void Media::setTitle(char* newtitle){
+  strcpy(title,newtitle);
+  return;
+}
+
+int Media::getYear(){
+  return year;
+}
+
+void Media::setYear(int newyear){
+  year=newyear;
+  return;
+}
+
+char Media::getType(){
+  return type;
+}
+
+#endif

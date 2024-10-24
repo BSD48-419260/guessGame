@@ -1,0 +1,39 @@
+#ifndef GAME_CPP
+#define GAME_CPP
+
+#include <iostream>
+#include <cstring>
+#include "Game.h"
+
+using namespace std;
+Game::Game(){
+  Media::type='G';
+  Media::title = new char[16];
+  Media::publisher = new char[16];
+  Media::rating = new char[6];
+}
+Game::Game(char* newtitle, int newyear, char* newpublisher, char* newrating){
+  Media::type='G';
+  Media::title = new char[16];
+  strcpy(Media::title,newtitle);
+  Media::year=newyear;
+  Media::publisher = new char[16];
+  strcpy(Media::publisher,newpublisher);
+  Media::rating = new char[6];
+  strcpy(Media::rating,newrating);
+}
+char* Game::getPublisher(){
+  return Media::publisher;
+}
+void Game::setPublisher(char* newpublisher){
+  strcpy(Media::publisher,newpublisher);
+  return;
+}
+char* Game::getRating(){
+  return Media::rating;
+}
+void Game::setRating(char* newrating){
+  strcpy(Media::rating,newrating);
+  return;
+}
+#endif
