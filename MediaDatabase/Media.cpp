@@ -1,20 +1,22 @@
 #include <iostream>
 #include <cstring>
-
 #include "Media.h"
 
 using namespace std;
-inline Media::Media(){
+
+Media::Media(){
+  delete title;
   title=new char[16];
 }
 
-inline Media::Media(char* newtitle, int newyear){
+Media::Media(char* newtitle, int newyear){
+  delete title;
   title=new char[16];
   strcpy(title,newtitle);
   year=newyear;
 }
 
-inline Media::~Media(){
+Media::~Media(){
   delete title;
   delete artist;
   delete director;
@@ -23,34 +25,54 @@ inline Media::~Media(){
   cout<<"Media Deleted"<<endl;
 }
 
-inline void Media::setto(Media copiedfrom){
-  title=copiedfrom.getTitle();
+void Media::setto(Media copiedfrom){
+  delete title;
+  title=new char[16];
+  strcpy(title,copiedfrom.getTitle());
+
   year=copiedfrom.getYear();
-  artist=copiedfrom.artist;
-  director=copiedfrom.director;
+
+  delete artist;
+  artist=new char[16];
+  strcpy(artist,copiedfrom.artist);
+
+  delete director;
+  director=new char[16];
+  strcpy(director,copiedfrom.director);
+
   duration=copiedfrom.duration;
-  publisher=copiedfrom.publisher;
-  rating=copiedfrom.rating;  
+
+  delete publisher;
+  publisher=new char[16];
+  strcpy(publisher,copiedfrom.publisher);
+
+  delete rating;
+  rating=new char[6];
+  strcpy(rating,copiedfrom.rating);
+
+  type=copiedfrom.type;
 }
 
-inline char* Media::getTitle(){
+char* Media::getTitle(){
   return title;
 }
 
-inline void Media::setTitle(char* newtitle){
+void Media::setTitle(char* newtitle){
+  delete title;
+  title = new char[16];
   strcpy(title,newtitle);
   return;
 }
 
-inline int Media::getYear(){
+int Media::getYear(){
   return year;
 }
 
-inline void Media::setYear(int newyear){
+void Media::setYear(int newyear){
   year=newyear;
   return;
 }
 
-inline char Media::getType(){
+char Media::getType(){
   return type;
 }

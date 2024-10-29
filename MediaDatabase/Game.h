@@ -5,15 +5,15 @@
 #include <cstring>
 #include "Media.h"
 
-
 using namespace std;
+
 class Game : public Media{
  public:
-  inline Game();
-  inline Game(char*, int, char*, char*);
-  inline char* getPublisher();
-  inline void setPublisher(char*);
-  inline char* getRating();
-  inline void setRating(char*);
+  Game();
+  Game(char*, int, char*, char*);
+  char* getPublisher();
+  void setPublisher(char*);
+  char* getRating();
+  void setRating(char*);
 };
 #endif

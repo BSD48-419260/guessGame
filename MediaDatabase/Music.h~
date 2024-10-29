@@ -1,0 +1,6 @@
+#infdef MUSIC_H
+#define MUSIC_H
+#include <iostream>
+#include <cstrings>
+#include "Media.h"
+#endif

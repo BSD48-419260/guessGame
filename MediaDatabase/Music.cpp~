@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include "Music.h"
+
+using namespace std;
+
+Music::Music(){
+  type='U';
+
+  delete title;
+  title = new char[16];
+
+  delete artist;
+  artist = new char[16];
+
+  delete publisher;
+  publisher = new char[16];
+}
+
+Music::Music(char* newtitle, char* newartist, int newyear, int newduration, char* newpublisher){
+  type='U';
+
+  delete title;
+  title = new char[16];
+  strcpy(title,newtitle);
+  
+  delete artist;
+  artist = new char[16];
+  strcpy(artist,newartist);
+
+  year=newyear;
+
+  duration=newduration;
+  
+  delete publisher;
+  publisher = new char[16];
+  strcpy(publisher,newpublisher);
+}
+
+char* Game::getArtist(){
+  return artist;
+}
+void Game::setArtist(char* newartist){
+  delete artist;
+  artist = new char[16];
+  strcpy(artist,newartist);
+}
+int Game::getDuration(){
+  
+}
+void Game::setDuration(int newduration){
+  duration=newduration;
+}
+char* Game::getPublisher(){
+  return publisher;
+}
+void Game::setPublisher(char* newpublisher){
+  delete publisher;
+  publisher = new char[16];
+  strcpy(publisher,newpublisher);
+}

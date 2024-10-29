@@ -3,6 +3,8 @@
 #include <vector>
 #include "Media.cpp"
 #include "Game.cpp"
+#include "Music.cpp"
+#include "Movie.cpp"
 using namespace std;
 
 void getStringFromInput(char*, int);
@@ -21,12 +23,15 @@ int main(){
   cout<<"/__\\  /__\\edia |/atabase"<<endl;
   cout<<"(Please note this program is\nincapable of saving data, so\ndon't actually use it for\nlogging media)"<<endl;
   bool notQuit=true;
+  char*input = new char[16];
   while(notQuit){
     cout<<"Echoes."<<endl;
-    char input[16];
     getStringFromInput(input, 16);
     cout<<"Function got: "<<endl;
-    cout<<input<<endl;
+    for(int i=0; i<16; i++){
+      cout<<input[i];
+    }
+    cout<<endl;
     if(strcmp(input,"ADD")==0){
 
     }else if(strcmp(input,"ADD")==0){
@@ -49,15 +54,16 @@ int main(){
 }
 
 void getStringFromInput(char* inpstring, int size){
+  delete inpstring;
   inpstring = new char[16];
+  char bufferarray [16];
   bool acin=false;
   for(int i=0;i<size;i++){
-    inpstring[i]='\0';
+    bufferarray[i]='\0';
   }
-  cin.ignore(100000,'\n');
   while(acin==false){
-    cout<<size-1<<" characters or less, please.";
-    cin.getline(inpstring,size);
+    cout<<size-1<<" characters or less, please."<<endl;
+    cin.getline(bufferarray, sizeof(bufferarray));
     if(cin.fail()){
       cout<<"I think you did something wrong. Please try again."<<endl;
       cin.clear();
@@ -68,6 +74,7 @@ void getStringFromInput(char* inpstring, int size){
   }
   cout<<"you input: "<<endl;
   for(int i=0; i<size; i++){
+    inpstring[i]=bufferarray[i];
     cout<<inpstring[i];
   }
   cout<<endl;

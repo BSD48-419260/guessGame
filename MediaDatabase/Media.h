@@ -9,20 +9,20 @@ using namespace std;
 class Media{
  public:
   //constructors and destructors
-  inline Media();
-  inline Media(char*,int);
-  inline ~Media();
-  inline void setto(Media);
+  Media();
+  Media(char*,int);
+  ~Media();
+  void setto(Media);
   //getters and setters
-  inline char* getTitle();
-  inline void setTitle(char*);
-  inline int getYear();
-  inline void setYear(int);
-  inline char getType();
+  char* getTitle();
+  void setTitle(char*);
+  int getYear();
+  void setYear(int);
+  char getType();
  protected:
   char* title;
-  int year;
   char* artist;
+  int year;
   char* director;
   int duration;
   char* publisher;
