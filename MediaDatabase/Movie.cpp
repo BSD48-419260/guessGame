@@ -14,7 +14,7 @@ Movie::Movie(){
   director = new char[16];
 
   delete rating;
-  rating = new char[6];
+  rating = new char[16];
 }
 
 Movie::Movie(char* newtitle, char* newdirector, int newyear, int newduration, char* newrating){
@@ -33,7 +33,7 @@ Movie::Movie(char* newtitle, char* newdirector, int newyear, int newduration, ch
   duration=newduration;
 
   delete rating;
-  rating = new char[6];
+  rating = new char[16];
   strcpy(rating,newrating);
 }
 
@@ -56,6 +56,6 @@ char* Movie::getRating(){
 }
 void Movie::setRating(char* newrating){
   delete rating;
-  rating = new char[6];
+  rating = new char[16];
   strcpy(rating,newrating);
 }

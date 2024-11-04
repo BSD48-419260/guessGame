@@ -24,7 +24,7 @@ Media::~Media(){
   delete rating;
   cout<<"Media Deleted"<<endl;
 }
-
+/*
 void Media::setto(Media copiedfrom){
   delete title;
   title=new char[16];
@@ -47,12 +47,12 @@ void Media::setto(Media copiedfrom){
   strcpy(publisher,copiedfrom.publisher);
 
   delete rating;
-  rating=new char[6];
+  rating=new char[16];
   strcpy(rating,copiedfrom.rating);
 
   type=copiedfrom.type;
 }
-
+*/
 char* Media::getTitle(){
   return title;
 }

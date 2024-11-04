@@ -12,7 +12,7 @@ class Media{
   Media();
   Media(char*,int);
   ~Media();
-  void setto(Media);
+  //void setto(Media);
   //getters and setters
   char* getTitle();
   void setTitle(char*);
