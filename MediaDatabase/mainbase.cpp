@@ -215,14 +215,15 @@ void addMedia(vector<Media*> & MainBase){
 void killMedia(vector<Media*> & MainBase){
 
 }
+
 void listMedia(vector<Media*> MainBase){
   for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
     if((*(*i)).getType()=='G'){
-      cout<<"Type: GAME, Title:"<<(*i)->getTitle()<<", Year:"<<(*i)->getYear()<<", Publisher:"<<(*i)->getPublisher()<<", Rating:"<<(*i)->getRating()<<endl;
+      cout<<"Type: GAME, Title:"<<static_cast <Game*>(*i)->getTitle()<<", Year:"<<static_cast <Game*>(*i)->getYear()<<", Publisher:"<<static_cast <Game*>(*i)->getPublisher()<<", Rating:"<<static_cast <Game*>(*i)->getRating()<<endl;
     }else if((*(*i)).getType()=='U'){
-      cout<<"Type: MUSIC, Title:"<<(*i)->getTitle()<<", Artist:"<<(*i)->getArtist()<<", Year:"<<(*i)->getYear()<<", Duration:"<<(*i)->getDuration()<<endl;
+      cout<<"Type: MUSIC, Title:"<<static_cast <Music*>(*i)->getTitle()<<", Artist:"<<static_cast <Music*>(*i)->getArtist()<<", Year:"<<static_cast <Music*>(*i)->getYear()<<", Duration:"<<static_cast <Music*>(*i)->getDuration()<<", Publisher:"<<static_cast <Music*>(*i)->getPublisher()<<endl;
     }else if((*(*i)).getType()=='O'){
-      cout<<"Type: MOVIE, Title:"<<(*i)->getTitle()<<", Director:"<<(*i)->getDirector()<<", Year:"<<(*i)->getYear()<<", Duration:"<<(*i)->getDuration()<<endl;
+      cout<<"Type: MOVIE, Title:"<<static_cast <Movie*>(*i)->getTitle()<<", Director:"<<static_cast <Movie*>(*i)->getDirector()<<", Year:"<<static_cast <Movie*>(*i)->getYear()<<", Duration:"<<static_cast <Movie*>(*i)->getDuration()<<", Rating:"<<static_cast <Movie*>(*i)->getRating()<<endl;
     }else{
       cout<<"ERROR! UNTYPED MEDIA"<<endl;
     }
