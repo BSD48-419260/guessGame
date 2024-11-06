@@ -250,6 +250,7 @@ void killMedia(vector<Media*> & MainBase){
   if(searchIndex==1){
     cout<<"Search by title name:"<<endl;
     getStringFromInput(input);
+    //searching by title
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
       if (strcmp((input),(*i)->getTitle())==0){
         numberfound++;
@@ -280,7 +281,7 @@ void killMedia(vector<Media*> & MainBase){
       }
     }
     cin.ignore(100000,'\n');
-    
+    //searching by year
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
       if (nwyear==((*i)->getYear())){
         numberfound++;
@@ -306,12 +307,24 @@ void killMedia(vector<Media*> & MainBase){
     return;
   }
   
-  //this is an important bit: because all the indexes are in order of being found, deleting in backwards order with erase will leave the indexes earlier in the list untouched, while only the ones after it shift, letting me ignore them as I've already taken care of everything I need to delete.
-  for(auto i=indexes.end()-1; i<=indexes.begin(); i--){
-     MainBase.erase(MainBase.begin()+(*i));
-     cout<<"Deleted object at interal index: "<<(*i)<<endl;
+  //this is an important bit: I need to delete in reverse order or else the indexes will move
+  //note: copied below from GPT because I was low on time.
+
+  sort(indexes.rbegin(), indexes.rend());
+
+  // Traditional for loop to delete elements from MainBase at the specified indexes
+  for (int j = 0; j < indexes.size(); ++j) {
+    int i = indexes[j];
+      
+    // Ensure index is within bounds
+    if (i >= 0 && i < MainBase.size()) {
+      MainBase.erase(MainBase.begin() + i);
+      cout << "Deleted object at index: " << i << endl;
+    }
   }
-  cout<<"Objects deleted."<<endl;
+  cout << "Objects deleted." << endl;
+  //end code copied from GPT
+  
   //only thing I need to delete...
   delete input;
 }
