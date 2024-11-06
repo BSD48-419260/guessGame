@@ -8,7 +8,7 @@
 using namespace std;
 
 //signatures
-void getStringFromInput(char*, int);
+void getStringFromInput(char* &);
 void addMedia(vector<Media*> & MainBase);
 void killMedia(vector<Media*> & MainBase);
 void listMedia(vector<Media*> MainBase);
@@ -34,7 +34,7 @@ int main(){
   while(notQuit){
     //command handler.
     cout<<"Please Input Command (ADD, DELETE, PRINT, SEARCH, QUIT)"<<endl;
-    getStringFromInput(input, 16);
+    getStringFromInput(input);
     cout<<"Function got: "<<endl;
     for(int i=0; i<16; i++){
       cout<<input[i];
@@ -60,18 +60,15 @@ int main(){
 }
 
 //string handler. I needed it. it makes everything soooo much easier.
-void getStringFromInput(char* inpstring, int size){
-  //whenever I don't do this, it doesn't return properly.
-  delete inpstring;
-  inpstring = new char[size];
-  char bufferarray [size];
+void getStringFromInput(char* & inpstring){
+  char bufferarray [16];
   //make sure it works
   bool acin=false;
-  for(int i=0;i<size;i++){
+  for(int i=0;i<16;i++){
     bufferarray[i]='\0';
   }
   while(acin==false){
-    cout<<size-1<<" characters or less, please."<<endl;
+    cout<<16-1<<" characters or less, please."<<endl;
     cin.getline(bufferarray, sizeof(bufferarray),'\n');
     //need to try robust.
     if(cin.fail()){
@@ -82,11 +79,8 @@ void getStringFromInput(char* inpstring, int size){
       acin=true;
     }
   }
-  cout<<"you input: "<<endl;
-  for(int i=0; i<size; i++){
-    inpstring[i]=bufferarray[i];
-    cout<<inpstring[i];
-  }
+  strncpy(inpstring, bufferarray, 15);
+  inpstring[15]='\0';
   cout<<endl;
   return;
 }
@@ -98,18 +92,15 @@ void addMedia(vector<Media*> & MainBase){
   bool acin=false;
   //command handler
   while(acin==false){
-    getStringFromInput(inpstring, 16);
+    getStringFromInput(inpstring);
     cout<<"Function got: "<<endl;
-    for(int i=0; i<16; i++){
-      cout<<inpstring[i];
-    }
     cout<<endl;
     //game handler
     if(strcmp(inpstring,"GAME")==0){
       acin=true;
       Game* newGame = new Game();
       cout<<"Title? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newGame->setTitle(inpstring);
       cout<<"Year?"<<endl;
       bool sacin=false;
@@ -127,20 +118,20 @@ void addMedia(vector<Media*> & MainBase){
       cin.ignore(100000,'\n');
       newGame->setYear(nwyear);
       cout<<"Publisher? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newGame->setPublisher(inpstring);
       cout<<"Rating? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newGame->setRating(inpstring);
       MainBase.push_back(newGame); 
     }else if(strcmp(inpstring,"MUSIC")==0){
       acin=true;
       Music* newMusic = new Music();
       cout<<"Title? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMusic->setTitle(inpstring);
       cout<<"Artist? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMusic->setArtist(inpstring);
       cout<<"Year?"<<endl;
       bool sacin=false;
@@ -173,17 +164,17 @@ void addMedia(vector<Media*> & MainBase){
       cin.ignore(100000,'\n');
       newMusic->setDuration(nwduration);
       cout<<"Publisher? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMusic->setPublisher(inpstring);
       MainBase.push_back(newMusic);
     }else if(strcmp(inpstring,"MOVIE")==0){ //Using
       acin=true;
       Movie* newMovie = new Movie();
       cout<<"Title? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMovie->setTitle(inpstring);
       cout<<"Director? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMovie->setDirector(inpstring);
       cout<<"Year?"<<endl;
       bool sacin=false;
@@ -215,7 +206,7 @@ void addMedia(vector<Media*> & MainBase){
       newMovie->setDuration(nwduration);
       cin.ignore(100000,'\n');
       cout<<"Rating? (15 chars or less, please)"<<endl;
-      getStringFromInput(inpstring,16);
+      getStringFromInput(inpstring);
       newMovie->setRating(inpstring);
       MainBase.push_back(newMovie);
     }else if(strcmp(inpstring,"CANCEL")==0){
@@ -235,7 +226,7 @@ void killMedia(vector<Media*> & MainBase){
   int searchIndex;
   while(notQuit){
     cout<<"What field do you wish to delete by? (TITLE, YEAR, CANCEL)"<<endl;
-    getStringFromInput(input, 16);
+    getStringFromInput(input);
     cout<<"Function got: "<<endl;
     for(int i=0; i<16; i++){
       cout<<input[i];
@@ -258,7 +249,7 @@ void killMedia(vector<Media*> & MainBase){
   vector<int> indexes;
   if(searchIndex==1){
     cout<<"Search by title name:"<<endl;
-    getStringFromInput(input, 16);
+    getStringFromInput(input);
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
       if (strcmp((input),(*i)->getTitle())==0){
         numberfound++;
@@ -308,7 +299,7 @@ void killMedia(vector<Media*> & MainBase){
   }
   cout<<"Total media found: "<<numberfound<<endl;
   cout<<"Are you sure you want to delete listed item(s)? there is no way to undo this. if so, type DELETE"<<endl;
-  getStringFromInput(input, 16);
+  getStringFromInput(input);
   if(strcmp(input,"DELETE")!=0){
     //only thing I need to delete...
     delete input;
@@ -316,7 +307,7 @@ void killMedia(vector<Media*> & MainBase){
   }
   
   //this is an important bit: because all the indexes are in order of being found, deleting in backwards order with erase will leave the indexes earlier in the list untouched, while only the ones after it shift, letting me ignore them as I've already taken care of everything I need to delete.
-  for(auto i=indexes.end(); i!=indexes.begin(); --i){
+  for(auto i=indexes.end()-1; i<=indexes.begin(); i--){
      MainBase.erase(MainBase.begin()+(*i));
      cout<<"Deleted object at interal index: "<<(*i)<<endl;
   }
@@ -347,7 +338,7 @@ void searchMedia(vector<Media*> MainBase){
   int searchIndex;
   while(notQuit){
     cout<<"What field do you wish to search by? (TITLE, YEAR, CANCEL)"<<endl;
-    getStringFromInput(input, 16);
+    getStringFromInput(input);
     cout<<"Function got: "<<endl;
     for(int i=0; i<16; i++){
       cout<<input[i];
@@ -370,7 +361,7 @@ void searchMedia(vector<Media*> MainBase){
   int numberfound=0;
   if(searchIndex==1){
     cout<<"Search by title name:"<<endl;
-    getStringFromInput(input, 16);
+    getStringFromInput(input);
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
       if (strcmp((input),(*i)->getTitle())==0){
         numberfound++;
