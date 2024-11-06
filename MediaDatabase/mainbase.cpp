@@ -32,6 +32,7 @@ int main(){
   bool notQuit=true;
   char*input = new char[16];
   while(notQuit){
+    //command handler.
     cout<<"Please Input Command (ADD, DELETE, PRINT, SEARCH, QUIT)"<<endl;
     getStringFromInput(input, 16);
     cout<<"Function got: "<<endl;
@@ -42,7 +43,7 @@ int main(){
     if(strcmp(input,"ADD")==0){
       addMedia(MainBase);
     }else if(strcmp(input,"DELETE")==0){
-
+      killMedia(MainBase);
     }else if(strcmp(input,"PRINT")==0){
       listMedia(MainBase);
     }else if(strcmp(input,"SEARCH")==0){
@@ -53,14 +54,18 @@ int main(){
       cout<<"Invalid Command."<<endl;
     }
   }
+  //cleaning up just before I end
   delete[] input;
   return 0;
 }
 
+//string handler. I needed it. it makes everything soooo much easier.
 void getStringFromInput(char* inpstring, int size){
+  //whenever I don't do this, it doesn't return properly.
   delete inpstring;
   inpstring = new char[size];
   char bufferarray [size];
+  //make sure it works
   bool acin=false;
   for(int i=0;i<size;i++){
     bufferarray[i]='\0';
@@ -68,6 +73,7 @@ void getStringFromInput(char* inpstring, int size){
   while(acin==false){
     cout<<size-1<<" characters or less, please."<<endl;
     cin.getline(bufferarray, sizeof(bufferarray),'\n');
+    //need to try robust.
     if(cin.fail()){
       cout<<"I think you did something wrong. Please try again."<<endl;
       cin.clear();
@@ -85,10 +91,12 @@ void getStringFromInput(char* inpstring, int size){
   return;
 }
 
+//Media adding function.
 void addMedia(vector<Media*> & MainBase){
   char* inpstring = new char[16];
   cout<<"Please declare which type of media you want to make: (GAME, MUSIC, MOVIE, CANCEL)"<<endl;
   bool acin=false;
+  //command handler
   while(acin==false){
     getStringFromInput(inpstring, 16);
     cout<<"Function got: "<<endl;
@@ -96,6 +104,7 @@ void addMedia(vector<Media*> & MainBase){
       cout<<inpstring[i];
     }
     cout<<endl;
+    //game handler
     if(strcmp(inpstring,"GAME")==0){
       acin=true;
       Game* newGame = new Game();
@@ -123,7 +132,7 @@ void addMedia(vector<Media*> & MainBase){
       cout<<"Rating? (15 chars or less, please)"<<endl;
       getStringFromInput(inpstring,16);
       newGame->setRating(inpstring);
-      MainBase.push_back(newGame);
+      MainBase.push_back(newGame); 
     }else if(strcmp(inpstring,"MUSIC")==0){
       acin=true;
       Music* newMusic = new Music();
@@ -216,6 +225,8 @@ void addMedia(vector<Media*> & MainBase){
       cout<<"Invalid Command."<<endl;
     }
   }
+  //don't need to delete anything because we passed all the pointers of the 'new' media into the MainBase
+  //do want to avoid memory leak however...
   delete[] inpstring;
 }
 void killMedia(vector<Media*> & MainBase){
@@ -251,6 +262,7 @@ void killMedia(vector<Media*> & MainBase){
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
       if (strcmp((input),(*i)->getTitle())==0){
         numberfound++;
+        //it may not be strictly necesary but I judge all aspects of deleted media to be relevant.
         indexes.push_back(static_cast<int>(i-MainBase.begin()));
         if((*(*i)).getType()=='G'){
           cout<<"Internal Index: "<<static_cast<int>(i-MainBase.begin())<<", Type: GAME, Title:"<<static_cast <Game*>(*i)->getTitle()<<", Year:"<<static_cast <Game*>(*i)->getYear()<<", Publisher:"<<static_cast <Game*>(*i)->getPublisher()<<", Rating:"<<static_cast <Game*>(*i)->getRating()<<endl;
@@ -297,7 +309,8 @@ void killMedia(vector<Media*> & MainBase){
   cout<<"Total media found: "<<numberfound<<endl;
   cout<<"Are you sure you want to delete listed item(s)? there is no way to undo this. if so, type DELETE"<<endl;
   getStringFromInput(input, 16);
-  if(strcmp(input,"TITLE")!=0){
+  if(strcmp(input,"DELETE")!=0){
+    //only thing I need to delete...
     delete input;
     return;
   }
@@ -308,6 +321,7 @@ void killMedia(vector<Media*> & MainBase){
      cout<<"Deleted object at interal index: "<<(*i)<<endl;
   }
   cout<<"Objects deleted."<<endl;
+  //only thing I need to delete...
   delete input;
 }
 
@@ -326,6 +340,7 @@ void listMedia(vector<Media*> MainBase){
   return;
 }
 
+//searchMedia. never called in the delete function but the main functionality is all there, just with a few edits. 
 void searchMedia(vector<Media*> MainBase){
   bool notQuit=true;
   char*input = new char[16];
@@ -339,6 +354,7 @@ void searchMedia(vector<Media*> MainBase){
     }
     cout<<endl;
     notQuit=false;
+    //I understand the use of SearchIndex may not be strictly needed but for a while I thought I was going to need literally every field.
     if(strcmp(input,"TITLE")==0){
       searchIndex=1;
     }else if(strcmp(input,"YEAR")==0){
