@@ -1,3 +1,8 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the cpp file that contains all the actual functions for the 'Game' class.
+ */
 #include <iostream>
 #include <cstring>
 #include "Game.h"
