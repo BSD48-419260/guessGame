@@ -1,3 +1,8 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the cpp file that contains all the actual functions for the 'Movie' class.
+ */
 #include <iostream>
 #include <cstring>
 #include "Movie.h"
