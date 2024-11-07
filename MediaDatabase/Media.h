@@ -1,3 +1,8 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the header file for the 'Media' class, the base parent class all the others rely on. the other files are useless without this, so don't remove this!
+ */
 #ifndef MEDIA_H
 #define MEDIA_H
 
