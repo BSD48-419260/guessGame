@@ -25,6 +25,7 @@ class Media{
   void setYear(int);
   char getType();
  protected:
+  //the reason I have all the names here is partially so I can delete them in the destructor. Well, that and so all the chilren classes need the same memory.
   char* title;
   char* artist;
   int year;
