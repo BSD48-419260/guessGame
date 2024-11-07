@@ -1,3 +1,9 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the header file for the 'Music' class.
+ */
+
 #ifndef MUSIC_H
 #define MUSIC_H
 
