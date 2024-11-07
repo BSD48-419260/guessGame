@@ -1,3 +1,8 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the header file for the 'Movie' class.
+ */
 #ifndef MOVIE_H
 #define MOVIE_H
 
