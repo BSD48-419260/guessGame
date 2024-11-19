@@ -1,12 +1,13 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <map>
 #include "room.cpp"
 using namespace std;
 
-void getStringFromInpt(char* &);
+void getStringFromInput(char* &);
 void moveroom(room* &);
-void listexits(room*)
+void describe(room*);
 
 int main()
 {
@@ -34,8 +35,25 @@ int main()
     cout<<"And without further ado, We begin."<<endl;
     
     //setup
+    char* roomlong = new char[201];
+    char* roomshort = new char[21];
+    //strncpy(roomlong,, 200);
+    //strncpy(roomshort,, 20);
+        
+    
+    strncpy(roomlong,"Before you stands a lithoid manning a desk hawking electronics. It asks:\nD I D Y O U G E T M Y L E A D ?\nYou remember that your 'group' agreed to exchange it some lead dust for a curious gyroscope. \0", 200);
+    strncpy(roomshort,"Electronics Stand", 20);
+    room* a1 = new room(roomlong,roomshort);
+    strncpy(roomlong,"You're at what was formerly the exterior door of the airlock.\nfunny to think the only thing that stands between you and freedom is a single integrated circuit.\0", 200);
+    strncpy(roomshort,"Airlock Door\0", 20);
+    room* b1 = new room(roomlong,roomshort);
     
     
+    //exits
+    a1->setExit("Stern",b1);
+    b1->setExit("Bow",a1);
+    
+    currentroom = b1;
     //main game
     bool notQuit=true;
     char*input = new char[21];
@@ -49,16 +67,16 @@ int main()
         }
         cout<<endl;
         if(strcmp(input,"GO")==0){
-          moveroom(currentroom);  
+            moveroom(currentroom);  
         }else if(strcmp(input,"LOOK")==0){
-            
+            describe(currentroom);
         }else if(strcmp(input,"PRINT")==0){
             
         }else if(strcmp(input,"SEARCH")==0){
             
         }else if(strcmp(input,"SURRENDER")==0){
             cout<<"You radio in to your friends that you're stuck, and they'll have to go on without you."<<endl;
-            cout<<"Slowly, you walk through the door at the end of the hall, right into the line of sight of eighteen seprate station security officers."<<end;
+            cout<<"Slowly, you walk through the door at the end of the hall, right into the line of sight of eighteen seprate station security officers."<<endl;
             cout<<"You put your hands behind your back, and get on your knees. you begin to speak \"I surrend-"<<endl;
             cout<<"You are immediately tackled by at least three security personel, and are executed by the next day."<<endl;
             cout<<"What did you expect? you killed an entire family to steal their ship, and in broad lamplight no less!"<<endl;
@@ -110,22 +128,20 @@ void moveroom(room* & currentroom){
         cout<<input[i];
     }
     cout<<endl;
-    if(strcmp(input,"GO")==0){
-      moveroom(currentroom);  
-    }else if(strcmp(input,"DELETE")==0){
-        
-    }else if(strcmp(input,"PRINT")==0){
-        
-    }else if(strcmp(input,"SEARCH")==0){
-        
-    }else if(strcmp(input,"SURRENDER")==0){
-        cout<<"You radio in to your friends that you're stuck, and they'll have to go on without you."<<endl;
-        cout<<"Slowly, you walk through the door at the end of the hall, right into the line of sight of eighteen seprate station security officers."<<end;
-        cout<<"You put your hands behind your back, and get on your knees. you begin to speak \"I surrend-"<<endl;
-        cout<<"You are immediately tackled by at least three security personel, and are executed by the next day."<<endl;
-        cout<<"What did you expect? you killed an entire family to steal their ship, and in broad lamplight no less!"<<endl;
-        notQuit=false;
+    room* moveto=currentroom->getExit(input);
+    if(moveto==nullptr){
+        cout<<"There is no exit that way."<<endl;
     }else{
-        cout<<"Invalid Command."<<endl;
+        currentroom = moveto;
     }
+    describe(currentroom);
+    delete[] input;
+}
+
+void describe(room* currentroom){
+    cout<<"You are in: ";
+    currentroom->printShortDesc();
+    currentroom->printLongDesc();
+    cout<<"Exits:"<<endl;
+    currentroom->printExits();
 }
