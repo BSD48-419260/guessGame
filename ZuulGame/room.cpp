@@ -1,41 +1,66 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 #include <map>
-
+using namespace std;
 
 class room{
   public:
     //constructors and destructors
     room(char* newlongdesc, char* newshortdesc){
-        strcpy(longDesc,newlongdesc, 200);
-        longDesc[200]= '\0'
-        strcpy(shortDesc,newshortdesc, 15);
-        shortDesc[15]= '\0'
+        delete[] longDesc;
+        longDesc = new char[201];
+        strncpy(longDesc,newlongdesc, 200);
+        longDesc[200]= '\0';
+        delete[] shortDesc;
+        shortDesc = new char [21];
+        strncpy(shortDesc,newshortdesc, 20);
+        shortDesc[20]= '\0';
     }
     
     //don't think I'll ever call this but better safe than sorry.
-    ~room{
+    ~room(){
         delete[] longDesc;
         delete[] shortDesc;
     }
     
     //getters and setters
     void setLongDesc(char* newlongdesc){
-        strcpy(longDesc,newlongdesc, 200);
-        longDesc[200]= '\0'
+        strncpy(longDesc,newlongdesc, 200);
+        longDesc[200]= '\0';
+    }
+    void printLongDesc(){
+        for(int i=0; i<200; i++){
+            cout<<longDesc[i];
+        }
+        cout<<endl;
+    }
+    void printShortDesc(){
+        for(int i=0; i<20; i++){
+            cout<<shortDesc[i];
+        }
+        cout<<endl;
     }
     void setShortDesc(char* newshortdesc){
-        strcpy(shortDesc,newshortdesc, 15);
-        shortDesc[15]= '\0'
+        strncpy(shortDesc,newshortdesc, 20);
+        shortDesc[20]= '\0';
     }
     void setExit(char* newfromdir, room* newexitto){
         exits[newfromdir] = newexitto;
     }
     room* getExit(char* fromdir){
-        return exits[fromdir];
+        map<char*, room*, memCompare>::iterator it = exits.begin();
+        // Iterate through the map and print the elements
+        while (it != exits.end()) {
+            if (strcmp((it->first),fromdir)==0){
+                return exits[fromdir];
+            }
+            ++it;
+        }
+        return nullptr;
     }
     void printExits(){
-        map<char* room*, memCompare>::iterator it = exits.begin();
+        map<char*, room*, memCompare>::iterator it = exits.begin();
         // Iterate through the map and print the elements
         while (it != exits.end()) {
             cout << "Direction: " << it->first << ", Room: " << it->second->shortDesc << endl;
@@ -56,6 +81,6 @@ class room{
     
     //variables
     map<char*, room*, memCompare> exits;
-    char* longDesc = new char[201];
-    char* shortDesc = new char [16];
+    char* longDesc;
+    char* shortDesc;
 };
