@@ -17,9 +17,12 @@ item* getItem(char*,vector<item*>&);
 
 int main()
 {
+    //Setup. 
     room* currentroom;
     vector<item*> inventory;
+    //this determines the ending of the game. Yay!
     bool wearingsuit=false;
+    //opening scrawl.
     cout<<"==============================="<<endl;
     cout<<"Welcome to:"<<endl;
     cout<<"           ________     ____ "<<endl;
@@ -41,6 +44,8 @@ int main()
     cout<<"At the other, sweet freedom. unfortunately behind a jammed former exterior airlock door. if you can get a suit on and through the door, you can radio your 'friends' to pick you up, then finally get out of this place."<<endl;
     cout<<"You digitally grimmace. you only carried in your porta-radio, and most stall owners are too wary for you to steal anything. you're low on opitions, but you've managed to wriggle your way out of worse before."<<endl;
     cout<<"And without further ado, We begin."<<endl;
+    
+    //all the charpointers and deletes below are to prevent memory leaks.
     
     //room setup
     char* roomlong = new char[251];
@@ -290,9 +295,9 @@ int main()
         }else if(strcmp(input,"TAKE")==0){
             takeitem(currentroom, inventory);
         }else if(strcmp(input,"DROP")==0){
-            dropitem(currentroom, inventory, wearingsuit);
+            dropitem(currentroom, inventory);
         }else if(strcmp(input,"USE")==0){
-            useFunction(currentroom, inventory);
+            useFunction(currentroom, inventory, wearingsuit);
         }else if(strcmp(input,"SURRENDER")==0){
             cout<<"You radio in to your 'group' that you're stuck, and they'll have to go on without you."<<endl;
             cout<<"Slowly, you walk through the door at the end of the hall, right into the line of sight of twenty-eight seprate station security officers."<<endl;
@@ -336,6 +341,7 @@ void getStringFromInput(char* & inpstring){
     return;
 }
 
+//uses the exit class to move between rooms.
 void moveroom(room* & currentroom, vector<item*> inventory){
     char*input = new char[21];
     //command handler.
@@ -357,6 +363,7 @@ void moveroom(room* & currentroom, vector<item*> inventory){
     delete[] input;
 }
 
+//description of whatever room you're in.
 void describe(room* currentroom,vector<item*> inventory){
     cout<<"You are in: ";
     currentroom->printShortDesc();
@@ -365,6 +372,7 @@ void describe(room* currentroom,vector<item*> inventory){
     currentroom->printItems();
 }
 
+//take item  function
 void takeitem(room* currentroom, vector<item*>& inventory){
     listInventory(inventory);
     currentroom->printItems();
@@ -386,7 +394,7 @@ void takeitem(room* currentroom, vector<item*>& inventory){
     delete[] input;
 }
 
-
+//drop item function
 void dropitem(room* currentroom, vector<item*>& inventory){
     listInventory(inventory);
     currentroom->printItems();
@@ -408,6 +416,7 @@ void dropitem(room* currentroom, vector<item*>& inventory){
     delete[] input;
 }
 
+//use/trade item function.
 void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit){
     listInventory(inventory);
     char * input = new char[21];
@@ -422,6 +431,8 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
     if(gottenitem==nullptr){
         cout<<"There is no item by that name."<<endl;
     }else{
+        
+        //use in a room code:
         //else if(strcmp(currentroom->shortDesc,"")==0){
         //    if(strcmp(gottenitem->name,"")==0){
         //        cout<<""<<endl;
@@ -430,6 +441,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
         //        worked=true;
         //    }
         //}
+        //various trades
         bool worked=false;
         if(strcmp(gottenitem->name,"Deflated Bagpipes")==0){
             cout<<"You try to play the pipes, but they've been pierced."<<endl;
@@ -463,7 +475,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
             }
         }else if(strcmp(currentroom->shortDesc,"Racist Bri\'ish KFC")==0){
             if(strcmp(gottenitem->name,"Fake Battle Plans")==0){
-                cout<<"One of the 'ooligans sees you walk in, and reads the words \"Defi\'nle r\'al battl\' plans\" on the paper you're holding.\nHe grabs the paper out of your hand and cheers \"'AVE GOT THEMS' BATTL\' PLANS RIGHT \'ERE\"\nThey all cheer, and in all the confusion, one of the \'ooligans hands you a KFC bucket for you're trouble.\n...It's full of meat pies.<<endl;
+                cout<<"One of the 'ooligans sees you walk in, and reads the words \"Defi\'nle r\'al battl\' plans\" on the paper you're holding.\nHe grabs the paper out of your hand and cheers \"'AVE GOT THEMS' BATTL\' PLANS RIGHT \'ERE\"\nThey all cheer, and in all the confusion, one of the \'ooligans hands you a KFC bucket for you're trouble.\n...It's full of meat pies."<<endl;
                 delete gottenitem;
                 addItem(inventory,"Bri\'ish KFC");
                 worked=true;
@@ -496,8 +508,25 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
                 addItem(inventory,"Airlock Circuit");
                 worked=true;
             }
+        }else if(strcmp(currentroom->shortDesc,"Airlock Door")==0){
+            //winning scrawl
+            if(strcmp(gottenitem->name,"Airlock Circuit")==0){
+                cout<<"You finally plug the little integrated circuit chip into the door.\nYou stick your finger into a port on the door, and begin the opening process.\nYou ignore a meatbag as it walks up behind you, and asks: \"Hey, what are you-\"\n\nBang.\n\nAnd with that, you're floating outside the airlock."<<endl;
+                cout<<"The entire contents of the airlock are spilled into the space outside it.\n a few dozen bodies float alognside celebrety mechandise, foodstuffs, and general junk.\nThe only things still moving are the ever-confused librarian bot and the half-alive tox-mod choking on it's rebreather. \n all you need to do is wait for your friends to come pick you up."<<endl;
+                cout<<"Hang on, is that the curio vender?\nIt looks like it's trying to laugh.\nWhat's so funny?"<<endl;
+                if(wearingsuit==true){
+                    cout<<"Well, it looks like you'll never know now, seeing as your \'friends\' are here.\nYou broadcast your location, and the tractor beam of your \'friends\' ship picks you up.\nYou make your way up to the bridge of the ship, and enter a charging-bed. you've had a long day at the market, and have earned some rest"<<endl;
+                }else{
+                    cout<<"The thing points down at the station, and you turn your head to look. you see...\n\nThe barrel of one of the station's point defense cannons, pointed directly at you\n\nJust before the destructor beam atomizes you, You realize that the station security could recognize you from the cameras, and decided that if you\'d already killed a few dozen people, your death would be no great loss."<<endl;
+                }
+                cout<<"You win! Thank you for playing Elliott\'s Zuul 3: FLEE THE MARKET!"<<endl;
+                cout<<"Somehow, Somewhere, an old man is laughing."<<endl;
+                delete gottenitem;
+                addItem(inventory,"");
+                exit(0);
+            }
         }
-        
+        //this is called if the item is useless.
         if(worked==false){
             cout<<"It doesn't work."<<endl;
             inventory.push_back(gottenitem);
@@ -506,6 +535,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
     delete[] input;
 }
 
+//lists whatever's in your inventory
 void listInventory(vector<item*> inventory){
     if(!(inventory.empty())){
         cout<<"ITEMS IN INVENTORY:"<<endl;
