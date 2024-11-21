@@ -475,7 +475,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
             }
         }else if(strcmp(currentroom->shortDesc,"Racist Bri\'ish KFC")==0){
             if(strcmp(gottenitem->name,"Fake Battle Plans")==0){
-                cout<<"One of the 'ooligans sees you walk in, and reads the words \"Defi\'nle r\'al battl\' plans\" on the paper you're holding.\nHe grabs the paper out of your hand and cheers \"'AVE GOT THEMS' BATTL\' PLANS RIGHT \'ERE\"\nThey all cheer, and in all the confusion, one of the \'ooligans hands you a KFC bucket for you're trouble.\n...It's full of meat pies."<<endl;
+                cout<<"One of the 'ooligans sees you walk in, and reads the words \"Defi\'nle r\'al battl\' plans\" on the paper you're holding.\nHe grabs the paper out of your hand and cheers \"'AVE GOT THEMS' BATTL\' PLANS RIGHT \'ERE\"\nThey all cheer, and start guzzling down copious quantities of alcohol and in all the confusion, one of the \'ooligans hands you a KFC bucket for you're trouble.\n...It's full of meat pies."<<endl;
                 delete gottenitem;
                 addItem(inventory,"Bri\'ish KFC");
                 worked=true;
@@ -489,7 +489,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
             }
         }else if(strcmp(currentroom->shortDesc,"\'Spice\' Dealer")==0){
             if(strcmp(gottenitem->name,"\'Dune\'")==0){
-                cout<<"The \'Spice\' dealer\'s eyes widen as you hand it the book \'Dune\'.\nIt begins to thank you profusely, and hands you a bag of... spice melange?\n(Your sensors tell you it's lead dust)"<<endl;
+                cout<<"The \'Spice\' dealer\'s eyes widen as you hand it the book \'Dune\'.\nIt begins to thank you profusely, and hands you a bag of... spice melange?\nNow that you've gotten you're hands on it, you're certain:\nIt\'s lead dust."<<endl;
                 delete gottenitem;
                 addItem(inventory,"Lead Dust");
                 worked=true;
@@ -503,7 +503,7 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
             }
         }else if(strcmp(currentroom->shortDesc,"Curio store")==0){
             if(strcmp(gottenitem->name,"Gyroscope")==0){
-                cout<<"The old man behind the counter picks up the gyroscope, and inspects it for a moment.\nWordlessly, it puts it down and picks up the circuit, then hands it to you.\nIt looks you in the occular, then something seems to change behind it\'s eyes.\nIt states plainly.\n\"You won\'t make it far. Even if you survive what comes next, I\'ll be waiting for you.\"\nIs that?\n\nWhatever changed behind the old man\'s eyes is gone now."<<endl;
+                cout<<"The old man behind the counter picks up the gyroscope, and inspects it for a moment.\nWordlessly, it puts it down and picks up the circuit, then hands it to you.\nIt looks you in the occular, then something seems to change behind it\'s eyes.\nIt states plainly.\n\"You won\'t make it far. Even if you survive what comes next, I\'ll be waiting for you.\"\n\nIs that?\n\nWhatever changed behind the old man\'s eyes is gone now."<<endl;
                 delete gottenitem;
                 addItem(inventory,"Airlock Circuit");
                 worked=true;
@@ -520,9 +520,8 @@ void useFunction(room* currentroom,vector<item*> & inventory, bool & wearingsuit
                     cout<<"The thing points down at the station, and you turn your head to look. you see...\n\nThe barrel of one of the station's point defense cannons, pointed directly at you\n\nJust before the destructor beam atomizes you, You realize that the station security could recognize you from the cameras, and decided that if you\'d already killed a few dozen people, your death would be no great loss."<<endl;
                 }
                 cout<<"You win! Thank you for playing Elliott\'s Zuul 3: FLEE THE MARKET!"<<endl;
-                cout<<"Somehow, Somewhere, an old man is laughing."<<endl;
+                cout<<"\n\n...Somehow, Somewhere, an old man is laughing...";
                 delete gottenitem;
-                addItem(inventory,"");
                 exit(0);
             }
         }
@@ -565,8 +564,9 @@ item* getItem(char* soughtName, vector<item*> & inventory){
     // meant to work similarly to 'pop_back' but for any item in the array.
     while (it != inventory.end()) {
         if (strcmp(((*it)->name),soughtName)==0){
+            item* returnitem= new item((*it)->name);
             inventory.erase(it);
-            return (*it);
+            return returnitem;
         }
         ++it;
     }
