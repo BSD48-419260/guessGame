@@ -11,6 +11,9 @@ struct item{
         strncpy(name,newname,20);
         name[20]='\0';
     }
+    ~item(){
+        delete[] name;
+    }
 };
 
 class room{
@@ -32,9 +35,16 @@ class room{
         delete[] longDesc;
         delete[] shortDesc;
         map<char*, room*, memCompare>::iterator it = exits.begin();
-        // Iterate through the map and print the elements
+        // Iterate through the map and delete everything
         while (it != exits.end()) {
-            cout << "Direction: " << it->first << ", Room: " << it->second->shortDesc << endl;
+            delete[] it->first;
+            delete it->second;
+            ++it;
+        }
+        vector<item*>::iterator it2 = roomInventory.begin();
+        // List every item in the vector
+        while (it2 != roomInventory.end()) {
+            delete[] (*it2)->name;
             ++it;
         }
     }
@@ -44,27 +54,32 @@ class room{
         strncpy(longDesc,newlongdesc, 250);
         longDesc[250]= '\0';
     }
+    //for description.
     void printLongDesc(){
         for(int i=0; i<250; i++){
             cout<<longDesc[i];
         }
         cout<<endl;
     }
+    //for setup.
     void printShortDesc(){
         for(int i=0; i<20; i++){
             cout<<shortDesc[i];
         }
         cout<<endl;
     }
+    //for setup.
     void setShortDesc(char* newshortdesc){
         strncpy(shortDesc,newshortdesc, 20);
         shortDesc[20]= '\0';
     }
+    //for setup.
     void setExit(char* newfromdir, room* newexitto){
         char* fromdir = new char[21];
         strncpy(fromdir,newfromdir, 20);
         exits[fromdir] = newexitto;
     }
+    //this is the eqivalent of the hashMap in the java version of this.
     room* getExit(char* fromdir){
         map<char*, room*, memCompare>::iterator it = exits.begin();
         // Check if the exit is in the array
@@ -76,6 +91,7 @@ class room{
         }
         return nullptr;
     }
+    //this lists the exits in every room.
     void printExits(){
         cout<<"EXITS:"<<endl;
         map<char*, room*, memCompare>::iterator it = exits.begin();
@@ -85,6 +101,7 @@ class room{
             ++it;
         }
     }
+    //room inventory lister.
     void printItems(){
         if(!(roomInventory.empty())){
             cout<<"ITEMS IN ROOM:"<<endl;
@@ -99,18 +116,20 @@ class room{
             cout<<"Nothing of interest is laying about."<<endl;
         }
     }
+    //makes a new item in the room.
     void addItem(char* newItem){
         item* bufferItem = new item(newItem);
         roomInventory.push_back(bufferItem);
     }
-    
+    //for inventory purposes. note: Removes item if found!
     item* getItem(char* soughtName){
         vector<item*>::iterator it = roomInventory.begin();
         // meant to work similarly to 'pop_back' but for any item in the array.
         while (it != roomInventory.end()) {
             if (strcmp(((*it)->name),soughtName)==0){
+                item* returnitem= new item((*it)->name);
                 roomInventory.erase(it);
-                return (*it);
+                return reuturnitem;
             }
             ++it;
         }
@@ -128,7 +147,7 @@ class room{
         }
     };
     
-    //variables
+    //exit map and item vector
     map<char*, room*, memCompare> exits;
     vector<item*> roomInventory;
     char* longDesc;
