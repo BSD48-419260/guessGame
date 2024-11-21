@@ -18,9 +18,9 @@ class room{
     //constructors and destructors
     room(char* newlongdesc, char* newshortdesc){
         delete[] longDesc;
-        longDesc = new char[201];
-        strncpy(longDesc,newlongdesc, 200);
-        longDesc[200]= '\0';
+        longDesc = new char[251];
+        strncpy(longDesc,newlongdesc, 250);
+        longDesc[250]= '\0';
         delete[] shortDesc;
         shortDesc = new char [21];
         strncpy(shortDesc,newshortdesc, 20);
@@ -41,11 +41,11 @@ class room{
     
     //getters and setters
     void setLongDesc(char* newlongdesc){
-        strncpy(longDesc,newlongdesc, 200);
-        longDesc[200]= '\0';
+        strncpy(longDesc,newlongdesc, 250);
+        longDesc[250]= '\0';
     }
     void printLongDesc(){
-        for(int i=0; i<200; i++){
+        for(int i=0; i<250; i++){
             cout<<longDesc[i];
         }
         cout<<endl;
@@ -61,7 +61,9 @@ class room{
         shortDesc[20]= '\0';
     }
     void setExit(char* newfromdir, room* newexitto){
-        exits[newfromdir] = newexitto;
+        char* fromdir = new char[21];
+        strncpy(fromdir,newfromdir, 20);
+        exits[fromdir] = newexitto;
     }
     room* getExit(char* fromdir){
         map<char*, room*, memCompare>::iterator it = exits.begin();
@@ -101,6 +103,7 @@ class room{
         item* bufferItem = new item(newItem);
         roomInventory.push_back(bufferItem);
     }
+    
     item* getItem(char* soughtName){
         vector<item*>::iterator it = roomInventory.begin();
         // meant to work similarly to 'pop_back' but for any item in the array.
