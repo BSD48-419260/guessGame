@@ -129,7 +129,7 @@ class room{
             if (strcmp(((*it)->name),soughtName)==0){
                 item* returnitem= new item((*it)->name);
                 roomInventory.erase(it);
-                return reuturnitem;
+                return returnitem;
             }
             ++it;
         }
