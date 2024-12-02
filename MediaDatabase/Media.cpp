@@ -1,9 +1,15 @@
+/*
+11/6/2024
+made by Elliott VanOrman for Jason Galbraith's C++ class
+This is the cpp file that contains all the actual functions for the base 'Media' class.
+ */
 #include <iostream>
 #include <cstring>
 #include "Media.h"
 
 using namespace std;
 
+//constructors.
 Media::Media(){
   delete title;
   title=new char[16];
@@ -15,15 +21,15 @@ Media::Media(char* newtitle, int newyear){
   strcpy(title,newtitle);
   year=newyear;
 }
-
+//Destructors. fun fact: Calling delete on a child class automatically invokes tha parent's destructor, meaning I can just say 'delete' and the memory gets deallocated.
 Media::~Media(){
   delete title;
   delete artist;
   delete director;
   delete publisher;
   delete rating;
-  cout<<"Media Deleted"<<endl;
 }
+//ignore this. bad idea I had, completely uncessary.
 /*
 void Media::setto(Media copiedfrom){
   delete title;
@@ -53,6 +59,7 @@ void Media::setto(Media copiedfrom){
   type=copiedfrom.type;
 }
 */
+//getters and setters
 char* Media::getTitle(){
   return title;
 }

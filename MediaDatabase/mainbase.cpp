@@ -1,3 +1,10 @@
+/*
+MediaDatabase
+11/6/2024
+By Elliott VanOrman for Jason Galbraith's C++ class.
+made to theoretically store three kinds media in a single vector
+please note this is useless without it's other tHree files!
+*/
 #include <iostream>
 #include <cstring>
 #include <vector>
@@ -307,11 +314,14 @@ void killMedia(vector<Media*> & MainBase){
     return;
   }
   
-  //this is an important bit: I need to delete in reverse order or else the indexes will move
-  //note: copied below from GPT because I was low on time.
-
+  //this is an important bit: I need to delete in reverse order or else the indexes will move, so deletions will delete the wrong things
+  //note: copied below from GPT because I was low on time. as such, I must explain why it does what it does in depth to explain my understanding.
+  //the purpose of the sort is to reverse the array for reasons previously mentioned.
+  //the purpose of the for loop is to go throuhg each individual index on the deleter
+  //the purpose of the if is to check if the index is inside the MainBase. not strictly necesary but useful in case of errors.
+  //the .erase is to actually delete the object
+  //the couts are for telemetry.
   sort(indexes.rbegin(), indexes.rend());
-
   // Traditional for loop to delete elements from MainBase at the specified indexes
   for (int j = 0; j < indexes.size(); ++j) {
     int i = indexes[j];
@@ -319,16 +329,16 @@ void killMedia(vector<Media*> & MainBase){
     // Ensure index is within bounds
     if (i >= 0 && i < MainBase.size()) {
       MainBase.erase(MainBase.begin() + i);
-      cout << "Deleted object at index: " << i << endl;
+      cout << "Deleted media at index: " << i << endl;
     }
   }
-  cout << "Objects deleted." << endl;
+  cout << "Media deleted." << endl;
   //end code copied from GPT
   
   //only thing I need to delete...
   delete input;
 }
-
+//listing media. not strictly necesary but nice to have. 
 void listMedia(vector<Media*> MainBase){
   for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
     if((*(*i)).getType()=='G'){
@@ -338,6 +348,7 @@ void listMedia(vector<Media*> MainBase){
     }else if((*(*i)).getType()=='O'){
       cout<<"Internal Index: "<<static_cast<int>(i-MainBase.begin())<<", Type: MOVIE, Title:"<<static_cast <Movie*>(*i)->getTitle()<<", Director:"<<static_cast <Movie*>(*i)->getDirector()<<", Year:"<<static_cast <Movie*>(*i)->getYear()<<", Duration:"<<static_cast <Movie*>(*i)->getDuration()<<", Rating:"<<static_cast <Movie*>(*i)->getRating()<<endl;
     }else{
+      //this should be literally impossible but you never know what might happen.
       cout<<"ERROR! UNTYPED MEDIA"<<endl;
     }
   }
@@ -373,6 +384,7 @@ void searchMedia(vector<Media*> MainBase){
   
   int numberfound=0;
   if(searchIndex==1){
+    //search by title.
     cout<<"Search by title name:"<<endl;
     getStringFromInput(input);
     for(auto i=MainBase.begin(); i!=MainBase.end(); ++i){
@@ -390,8 +402,10 @@ void searchMedia(vector<Media*> MainBase){
       }
     }
   }else if(searchIndex==2){
+    //search by year.
     bool sacin=false;
     int nwyear;
+    cout<<"Search by Year:"<<endl;
     while(sacin==false){
       cin>>nwyear;
       if(cin.fail()){
