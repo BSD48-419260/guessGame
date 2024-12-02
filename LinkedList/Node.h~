@@ -1,0 +1,22 @@
+#ifndef NODE_H
+#define NODE_H
+#include "Student.h"
+#include<iostream>
+
+using namespace std;
+
+class Node{
+ public:
+  Node* getNext();
+  void setNext(Node*);
+  Node* getPrev();
+  void setPrev(Node*);
+  
+ private:
+  Student* refrencedStudent;
+  Node* prev;
+  Node* next;
+};
+
+
+#endif
