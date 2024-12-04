@@ -6,7 +6,7 @@ Node::Node(){
   next=nullptr;
 }
 
-Node::Node(Student*){
+Node::Node(Student* newkid){
   refrencedStudent=newkid;
   next=nullptr;
 }
