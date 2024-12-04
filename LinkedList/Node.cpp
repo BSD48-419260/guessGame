@@ -3,30 +3,35 @@
 
 Node::Node(){
   refrencedStudent=nullptr;
-  prev=nullptr;
   next=nullptr;
 }
 
 Node::Node(Student*){
   refrencedStudent=newkid;
-  prev=nullptr;
   next=nullptr;
 }
 
-Node::Node(Student* newkid, Node*& newPrevious, Node*& newNext){
+Node::Node(Student* newkid, Node*& newNext){
   refrencedStudent=newkid;
-  prev=newPrevious;
-  prev->setNext(&this);
   next=newNext;
-  next->setPrev(&this);
 }
 
 Node::~Node(){
   delete refrencedStudent;
-  prev->setNext(this.next);
-  next->setPrev(this.prev);
 }
 
 Node* Node::getNext(){
-  
+  return next;
+}
+
+void Node::setNext(Node* newNext){
+  next=newNext;
+}
+
+Student* Node::getStudent(){
+  return refrencedStudent;
+}
+
+void Node::setStudent(Student* newStudent){
+  refrencedStudent=newStudent;
 }
