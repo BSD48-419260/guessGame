@@ -3,6 +3,11 @@
 #include<iostream>
 
 class Student{
-  //this is empty because I don't actually need to be able to modify students
+  //this student only has a name for testing purposes.
+ public:
+  char* name;
+  Student(char* newname){
+    name=newname;
+  }
 };
 #endif
