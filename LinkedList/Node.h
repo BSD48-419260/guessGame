@@ -5,10 +5,12 @@
 using namespace std;
 
 //Here's something fun: I'm making it a circular doubly linked list, because it didn't look hard enough.
-//Yes, I will almost certainly regret doing this. on the other hand however, Why not?
+//Yes, I will almost certainly regret doing this, as I will be forced to do extra work.
+//on the other hand however, Why not?
 class Node{
  public:
   Node();
+  Node(Student*);
   Node(Student*, Node*&, Node*&);
   ~Node();
   Node* getNext();
