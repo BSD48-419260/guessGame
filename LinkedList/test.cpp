@@ -27,7 +27,7 @@ int main(){
   //showing delete ~Node() working
   cout<<"crud"<<endl;
   delete fourthnode;
-  firstnode->setNext(nullptr);
+  thirdnode->setNext(nullptr);
   printall(firstnode);
   return 0;
 }
