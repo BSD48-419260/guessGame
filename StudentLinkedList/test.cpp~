@@ -1,0 +1,17 @@
+#include "Node.cpp"
+#include "Node.h"
+#include "Student.h"
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+//Here is a test of the functions I have made.
+int main(){
+  Student* Alice = new Student((char*)"Alice");
+  Student* Bob = new Student((char*)"Bob");
+  Student* Charles = new Student((char*)"Charles");
+  Student* Debra = new Student((char*)"Debra");
+  //node constructor being shown
+  Node* firstnode = new Node(
+  return 0;
+}
