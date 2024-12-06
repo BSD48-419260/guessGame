@@ -25,45 +25,51 @@ struct Student{
 
 
 //signature list
+void getStringFromInput(char* & inpstring);
 void addStudent(Node* head);
+void linearAdd(Node* current);
 void killStudent(Node* head);
 void listStudents(Node* head);
 void modStudent(Node* head);
-int getID(Node* head);
+void averageGPAS(Node* head);
+Student* getStudentByID(int ID,Node* head);
+int getID();
 
 
 int main(){
-  vector <Student*> StudentList;
+  Node * head = new Node();
   //opening scrawl
   cout<<"==========================="<<endl;
   cout<<"Welcome to:"<<endl;
-  cout<<"  ____         ___"<<endl;
-  cout<<" / ___\\        | |"<<endl;
-  cout<<" | | |_\\       | |"<<endl;
-  cout<<" | |__         | |"<<endl;
-  cout<<" \\___ \\        | |"<<endl;
-  cout<<"__  | |        | |"<<endl;
-  cout<<"\\ |_| |        | |___"<<endl;
-  cout<<" \\____/ tudent |____| ister"<<endl;
+  cout<<"  _____         _____           _____         _____        ________ "<<endl;
+  cout<<" / ___ \        \   /           \   /         \   /        \  ____/ "<<endl;
+  cout<<" | | /__\        | |             | |           | |          | |     "<<endl;
+  cout<<" | |___          | |             | |           | |          | |_/|  "<<endl;
+  cout<<" \____ \         | |             | |           | |          |  _ |  "<<endl;
+  cout<<"____ | |         | |             | |           | |          | | \|  "<<endl;
+  cout<<"\  /_| |         | |___          | |___        | |___       | |___  "<<endl;
+  cout<<" \_____/ tudent /______\ ister, /______\ inked/______\ ist /______\ dition."<<endl;
   bool notQuit=true;
   cout<<"(Please note this program is incapable of saving data, so don't actually use it for managing students)"<<endl;
   while(notQuit){
     //trying to be robust. Also, Command handler.
-    cout<<"Please input a command. (Valid commands: ADD, DELETE, PRINT, MODIFY, QUIT)"<<endl;
-    char inpstring[7];
+    cout<<"Please input a command. (Valid commands: ADD, DELETE, PRINT, MODIFY, AVERAGE, QUIT)"<<endl;
+    char inpstring[8];
     cin >> inpstring;
     if(cin.fail()){
       cout<<"I think you did something wrong. please try again."<<endl;
       cin.clear();
       cin.ignore(100000,'\n');
     }else if (strcmp(inpstring,"ADD")==0){
-      addStudent(StudentList);
+      addStudent(head);
     }else if (strcmp(inpstring,"DELETE")==0){
-      killStudent(StudentList);
+      killStudent(head);
     }else if (strcmp(inpstring,"PRINT")==0){
-      listStudents(StudentList);
+      listStudents(head);
     }else if (strcmp(inpstring,"MODIFY")==0){
-      modStudent(StudentList);
+      modStudent(head);
+    }else if (strcmp(inpstring,"AVERAGE")==0){
+      averageGPAS(head);
     }else if (strcmp(inpstring,"QUIT")==0){
       notQuit=false;
       //no command needed, just quit the loop.
@@ -71,62 +77,59 @@ int main(){
       cout<<"Invalid Command."<<endl;
     }
   }
-  cout<<"Have a wonderful day."<<endl;
+  cout<<"Have a good day."<<endl;
   return 0;
 }
 
+
+void getStringFromInput(char* & inpstring){
+  char bufferarray [11];
+  //make sure it works
+  bool acin=false;
+  for(int i=0;i<11;i++){
+    bufferarray[i]='\0';
+  }
+  while(acin==false){
+    cout<<"10 characters or less, please."<<endl;
+    cin.getline(bufferarray, sizeof(bufferarray),'\n');
+    //need to try robust.
+    if(cin.fail()){
+      cout<<"I think you did something wrong. Please try again."<<endl;
+      cin.clear();
+      cin.ignore(100000,'\n');
+    }else{
+      acin=true;
+    }
+  }
+  strncpy(inpstring, bufferarray, 10);
+  inpstring[10]='\0';
+  cout<<endl;
+  return;
+}
+
+
+/*
+====================================================
+CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
+====================================================
+*/
+
 //student adding command
-void addStudent(vector <Student*> & StudentList){
+void addStudent(Node* head){
   Student* newkid = new Student();
   bool acin=false;
   //name getting
-  char inpstring[11];
-  //First name getter
-  for(int i=0; i<11; i++){
-    inpstring[i]='\0';
-  }
-  cin.ignore(100000,'\n');
-  while (acin==false){
-    cout<<"Please Enter Firstname (10 characters or less): "<<endl;
-    cin.getline(inpstring,sizeof(inpstring));
-    if(cin.fail()){
-      cout<<"I think you did something wrong. please try again."<<endl;
-      cin.clear();
-      cin.ignore(100000,'\n');
-    }else{
-      acin=true;
-    }
-  }
-  for(int i=0; i<10; i++){
-    (*newkid).Firstname[i]=inpstring[i];
-  }
-  (*newkid).Firstname[10]='\0';
-  //Last name getter
-  acin=false;
-  for(int i=0; i<11; i++){
-    inpstring[i]='\0';
-  }
-  while (acin==false){
-    cout<<"Please Enter Lastname (10 characters or less): "<<endl;
-    cin.getline(inpstring,sizeof(inpstring));
-    if(cin.fail()){
-      cout<<"I think you did something wrong. please try again."<<endl;
-      cin.clear();
-      cin.ignore(100000,'\n');
-    }else{
-      acin=true;
-    }
-  }
-  for(int i=0; i<10; i++){
-    (*newkid).Lastname[i]=inpstring[i];
-  }
-  (*newkid).Lastname[10]='\0';
+  char* inpstring[11];
+  cout<<"Please input First Name"<<endl;
+  void getStringFromInput(inpstring);
+  strncpy(newkid->Firstname,inpstring,10);
+  
   //ID getting. can recycle getID method here.
   int posid;
   acin=false;
   while(acin==false){
-    posid=getID(StudentList);
-    if(getIndex(posid,StudentList)==-1){
+    posid=getID();
+    if(getStudentById(posid,head)==nullptr){
       acin=true;
     }else{
       cout<<"A student with that ID already exists!"<<endl;
@@ -152,6 +155,10 @@ void addStudent(vector <Student*> & StudentList){
   StudentList.push_back(newkid);
   //making sure the kid exists before returning.
   return;
+}
+
+void linearAdd(Node* current){
+
 }
 
 //student deleter. clears memory and removes from the list.
@@ -291,7 +298,7 @@ int getIndex(int ID, vector <Student*> & StudentList){
 }
 
 //for getting IDs.
-int getID(vector <Student*> & StudentList){
+int getID(){
   bool acin=false;
   int ID;
   while (acin==false){
