@@ -25,7 +25,7 @@ struct Student{
 
 
 //signature list
-void getStringFromInput(char* & inpstring);
+void getStringFromInput(char* inpstring);
 void addStudent(Node* head);
 void linearAdd(Node* head, Node* current, Node* addme);
 void killStudent(Node* head);
@@ -42,13 +42,13 @@ int main(){
   cout<<"==========================="<<endl;
   cout<<"Welcome to:"<<endl;
   cout<<"  _____         _____           _____         _____        ________ "<<endl;
-  cout<<" / ___ \        \   /           \   /         \   /        \  ____/ "<<endl;
-  cout<<" | | /__\        | |             | |           | |          | |     "<<endl;
+  cout<<" / ___ \\        \\   /           \\   /         \\   /        \\  ____/ "<<endl;
+  cout<<" | | /__\\        | |             | |           | |          | |     "<<endl;
   cout<<" | |___          | |             | |           | |          | |_/|  "<<endl;
-  cout<<" \____ \         | |             | |           | |          |  _ |  "<<endl;
-  cout<<"____ | |         | |             | |           | |          | | \|  "<<endl;
-  cout<<"\  /_| |         | |___          | |___        | |___       | |___  "<<endl;
-  cout<<" \_____/ tudent /______\ ister, /______\ inked/______\ ist /______\ dition."<<endl;
+  cout<<" \\____ \\         | |             | |           | |          |  _ |  "<<endl;
+  cout<<"____ | |         | |             | |           | |          | | \\|  "<<endl;
+  cout<<"\\  /_| |         | |___          | |___        | |___       | |___  "<<endl;
+  cout<<" \\_____/ tudent /______\\ ister, /______\\ inked /______\\ ist /______\\ dition."<<endl;
   bool notQuit=true;
   cout<<"(Please note this program is incapable of saving data, so don't actually use it for managing students)"<<endl;
   while(notQuit){
@@ -63,7 +63,7 @@ int main(){
     }else if (strcmp(inpstring,"ADD")==0){
       addStudent(head);
     }else if (strcmp(inpstring,"DELETE")==0){
-      killStudent(head);
+      //killStudent(head);
     }else if (strcmp(inpstring,"PRINT")==0){
       listStudents(head);
     }else if (strcmp(inpstring,"MODIFY")==0){
@@ -82,7 +82,7 @@ int main(){
 }
 
 
-void getStringFromInput(char* & inpstring){
+void getStringFromInput(char* inpstring){
   char bufferarray [11];
   //make sure it works
   bool acin=false;
@@ -170,18 +170,29 @@ void linearAdd(Node* head, Node* current, Node* addme){
     head->setStudent(addme->getStudent());
     addme->setStudent(nullptr);
     delete addme;
-  }else if (head->getStudent->ID > addme->getStudent->ID){
+  }else if (head->getStudent()->ID > addme->getStudent()->ID){
     addme->setNext(head);
     head = addme;
   }else if (current->getNext()==nullptr){
-    if (current->getStudent()->ID < addme->getStudent->ID){
+    if (current->getStudent()->ID < addme->getStudent()->ID){
       current->setNext(addme);
     }
-  }else if ((current->getStudent()->ID < addme->getStudent->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent->ID)){
+  }else if ((current->getStudent()->ID < addme->getStudent()->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent()->ID)){
     addme->setNext(current->getNext());
     current->setNext(addme);
   }else{
-    linearAdd(head,current->getNext() addme);
+    linearAdd(head, current->getNext(), addme);
+  }
+}
+
+//actual lister function. when called, prints all students
+void listStudents(Node* head){
+  if(head->getStudent()==nullptr){
+    cout<<"There are no students!"<<endl;
+  }
+  cout<<"Student Name:"<<head->getStudent()->Firstname<<" "<<head->getStudent()->Lastname<<"ID: "<<head->getStudent()->ID<<"GPA: "<<(round(head->getStudent()->GPA * 100))/100<<endl;
+  if(head->getNext()!=nullptr){
+    listStudents(head->getNext());
   }
 }
 
@@ -204,14 +215,6 @@ void killStudent(vector <Student*> & StudentList){
   delete *(StudentList.begin()+index);
   //then clear the part of the list.
   StudentList.erase(StudentList.begin()+index);
-  return;
-}
-
-//actual lister function. when called, prints all students
-void listStudents(vector <Student*> StudentList){
-  for(auto i=StudentList.begin(); i!=StudentList.end(); ++i){
-    cout<<"Firstname: "<<(*(*i)).Firstname<<", Lastname: "<<(*(*i)).Lastname<<", ID: "<<(*(*i)).ID<<", GPA: "<<(round((*(*i)).GPA * 100))/100<<endl;
-  }
   return;
 }
 
