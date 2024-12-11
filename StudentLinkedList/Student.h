@@ -11,6 +11,7 @@ class Student{
   char* Lastname = new char[11];
   int ID;
   float GPA;
+  Student();
   Student(char*, char*, int, float);
   ~Student();
 };

@@ -27,7 +27,7 @@ struct Student{
 //signature list
 void getStringFromInput(char* & inpstring);
 void addStudent(Node* head);
-void linearAdd(Node* current);
+void linearAdd(Node* head, Node* current, Node* addme);
 void killStudent(Node* head);
 void listStudents(Node* head);
 void modStudent(Node* head);
@@ -67,9 +67,9 @@ int main(){
     }else if (strcmp(inpstring,"PRINT")==0){
       listStudents(head);
     }else if (strcmp(inpstring,"MODIFY")==0){
-      modStudent(head);
+      //modStudent(head);
     }else if (strcmp(inpstring,"AVERAGE")==0){
-      averageGPAS(head);
+      //averageGPAS(head);
     }else if (strcmp(inpstring,"QUIT")==0){
       notQuit=false;
       //no command needed, just quit the loop.
@@ -107,13 +107,6 @@ void getStringFromInput(char* & inpstring){
   return;
 }
 
-
-/*
-====================================================
-CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
-====================================================
-*/
-
 //student adding command
 void addStudent(Node* head){
   Student* newkid = new Student();
@@ -121,9 +114,11 @@ void addStudent(Node* head){
   //name getting
   char* inpstring[11];
   cout<<"Please input First Name"<<endl;
-  void getStringFromInput(inpstring);
-  strncpy(newkid->Firstname,inpstring,10);
-  
+  getStringFromInput(inpstring);
+  strncpy(newkid->Firstname,inpstring,11);
+  cout<<"Please input Last Name"<<endl;
+  getStringFromInput(inpstring);
+  strncpy(newkid->Lastname,inpstring,11);
   //ID getting. can recycle getID method here.
   int posid;
   acin=false;
@@ -135,7 +130,7 @@ void addStudent(Node* head){
       cout<<"A student with that ID already exists!"<<endl;
     }
   }
-  (*newkid).ID=posid;
+  newkid->ID=posid;
   //GPA getting
   float newGPA;
   acin=false;
@@ -151,16 +146,52 @@ void addStudent(Node* head){
     }
   }
   acin=false;
-  (*newkid).GPA=newGPA;
-  StudentList.push_back(newkid);
-  //making sure the kid exists before returning.
+  newkid->GPA=newGPA;
+  
+  linearAdd(head,head, Node* addme);
   return;
 }
 
-void linearAdd(Node* current){
-
+Student* getStudentByID(int ID,Node* head){
+  if(head->getStudent()->ID==ID){
+    return head->getStudent(); 
+  }else{
+    if (head->getNext()==nullptr){
+      return nullptr;
+    }else{
+      return getStudentByID(ID,head->getNext());
+    }
+  }
 }
 
+
+void linearAdd(Node* head, Node* current, Node* addme){
+  if (current->getStudent()==nullptr){
+    head->setStudent(addme->getStudent());
+    addme->setStudent(nullptr);
+    delete addme;
+  }else if (head->getStudent->ID > addme->getStudent->ID){
+    addme->setNext(head);
+    head = addme;
+  }else if (current->getNext()==nullptr){
+    if (current->getStudent()->ID < addme->getStudent->ID){
+      current->setNext(addme);
+    }
+  }else if ((current->getStudent()->ID < addme->getStudent->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent->ID)){
+    addme->setNext(current->getNext());
+    current->setNext(addme);
+  }else{
+    linearAdd(head,current->getNext() addme);
+  }
+}
+
+/*
+====================================================
+CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
+====================================================
+*/
+
+/*
 //student deleter. clears memory and removes from the list.
 void killStudent(vector <Student*> & StudentList){
   listStudents(StudentList);
@@ -296,6 +327,7 @@ int getIndex(int ID, vector <Student*> & StudentList){
   }
   return -1;
 }
+*/
 
 //for getting IDs.
 int getID(){
