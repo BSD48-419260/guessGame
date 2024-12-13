@@ -27,8 +27,9 @@ struct Student{
 //signature list
 void getStringFromInput(char* inpstring);
 void addStudent(Node* head);
-void linearAdd(Node* head, Node* current, Node* addme);
+void linearAdd(Node* current, Node* addme);
 void killStudent(Node* head);
+void deleteStudent(Node* head, int ID);
 void listStudents(Node* head);
 void modStudent(Node* head);
 void averageGPAS(Node* head);
@@ -63,7 +64,7 @@ int main(){
     }else if (strcmp(inpstring,"ADD")==0){
       addStudent(head);
     }else if (strcmp(inpstring,"DELETE")==0){
-      //killStudent(head);
+      killStudent(head);
     }else if (strcmp(inpstring,"PRINT")==0){
       listStudents(head);
     }else if (strcmp(inpstring,"MODIFY")==0){
@@ -107,12 +108,14 @@ void getStringFromInput(char* inpstring){
   return;
 }
 
-//student adding command
+//student adding command. Despite name, actuall adding logic sits in linearAdd function. this one just gets all the information
 void addStudent(Node* head){
   Student* newkid = new Student();
   bool acin=false;
   //name getting
-  char* inpstring[11];
+  char* inpstring = new char[11];
+  cin.clear();
+  cin.ignore(100000,'\n');
   cout<<"Please input First Name"<<endl;
   getStringFromInput(inpstring);
   strncpy(newkid->Firstname,inpstring,11);
@@ -124,7 +127,7 @@ void addStudent(Node* head){
   acin=false;
   while(acin==false){
     posid=getID();
-    if(getStudentById(posid,head)==nullptr){
+    if(getStudentByID(posid,head)==nullptr){
       acin=true;
     }else{
       cout<<"A student with that ID already exists!"<<endl;
@@ -147,13 +150,16 @@ void addStudent(Node* head){
   }
   acin=false;
   newkid->GPA=newGPA;
-  
-  linearAdd(head,head, Node* addme);
+  Node* addme = new Node(newkid);
+  linearAdd(head,addme);
   return;
 }
 
+//this all this code does is find a student by their ID number.
 Student* getStudentByID(int ID,Node* head){
-  if(head->getStudent()->ID==ID){
+  if (head->getStudent()==nullptr){
+      return nullptr;
+  }else if(head->getStudent()->ID==ID){
     return head->getStudent(); 
   }else{
     if (head->getNext()==nullptr){
@@ -164,24 +170,25 @@ Student* getStudentByID(int ID,Node* head){
   }
 }
 
-
-void linearAdd(Node* head, Node* current, Node* addme){
+//actual student adding logic. above code is just data gathering
+void linearAdd(Node* current, Node* addme){
   if (current->getStudent()==nullptr){
-    head->setStudent(addme->getStudent());
+    current->setStudent(addme->getStudent());
     addme->setStudent(nullptr);
     delete addme;
-  }else if (head->getStudent()->ID > addme->getStudent()->ID){
-    addme->setNext(head);
-    head = addme;
+  }else if (current->getStudent()->ID > addme->getStudent()->ID){
+    addme->setNext(current->getNext());
+    current->setNext(addme);
+    Student* buffer = current->getStudent();
+    current->setStudent(addme->getStudent());
+    addme->setStudent(buffer);
   }else if (current->getNext()==nullptr){
-    if (current->getStudent()->ID < addme->getStudent()->ID){
-      current->setNext(addme);
-    }
+    current->setNext(addme);
   }else if ((current->getStudent()->ID < addme->getStudent()->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent()->ID)){
     addme->setNext(current->getNext());
     current->setNext(addme);
   }else{
-    linearAdd(head, current->getNext(), addme);
+    linearAdd(current->getNext(), addme);
   }
 }
 
@@ -189,10 +196,45 @@ void linearAdd(Node* head, Node* current, Node* addme){
 void listStudents(Node* head){
   if(head->getStudent()==nullptr){
     cout<<"There are no students!"<<endl;
+    return;
   }
-  cout<<"Student Name:"<<head->getStudent()->Firstname<<" "<<head->getStudent()->Lastname<<"ID: "<<head->getStudent()->ID<<"GPA: "<<(round(head->getStudent()->GPA * 100))/100<<endl;
+  cout<<"Student Name:"<<head->getStudent()->Firstname<<" "<<head->getStudent()->Lastname<<" ID: "<<head->getStudent()->ID<<" GPA: "<<(round(head->getStudent()->GPA * 100))/100<<endl;
   if(head->getNext()!=nullptr){
     listStudents(head->getNext());
+  }
+}
+
+
+//student deleter preamble. doesn't actually delete anything, just preps for the real deletion code. 
+void killStudent(Node* head){
+  listStudents(head);
+  int index = getID();
+  if(head->getStudent()==nullptr){
+    return;
+  }
+  deleteStudent(head,index);
+}
+
+//Real deleter.clears memory and removes from the list.
+void deleteStudent(Node* current, int ID){
+  if(current->getStudent()->ID==ID){
+    if(current->getNext()!=nullptr){
+      Student* buffer = current->getStudent();
+      current->setStudent(current->getNext()->getStudent());
+      current->getNext()->setStudent(buffer);
+      Node* killbuffer = current->getNext();
+      current->setNext(current->getNext()->getNext());
+      delete killbuffer;
+    }else{
+      delete current;
+      (*(&current))=nullptr;
+    }
+  }else{
+    if (current->getNext()==nullptr){
+      cout<<"ERROR: No student with that ID exists!"<<endl;
+    }else {
+      deleteStudent(current->getNext(),ID);
+    }
   }
 }
 
@@ -202,21 +244,8 @@ CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
 ====================================================
 */
 
+
 /*
-//student deleter. clears memory and removes from the list.
-void killStudent(vector <Student*> & StudentList){
-  listStudents(StudentList);
-  int index = getIndex(getID(StudentList),StudentList);
-  if (index == -1){
-    cout<<"INVALID ID"<<endl;
-    return;
-  }
-  //clear the data first. nobody likes a memory leak.
-  delete *(StudentList.begin()+index);
-  //then clear the part of the list.
-  StudentList.erase(StudentList.begin()+index);
-  return;
-}
 
 //student modifier. because why not?
 void modStudent(vector <Student*> & StudentList){
