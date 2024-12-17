@@ -3,7 +3,7 @@
  Inteded to work as a prototype database for students
  students are structs kept in student* vector.
  Made by Elliott VanOrman for Jason Galbraith's C++ C++/Data Structures Class
- 10/3/2024
+ 12/7/2024
  */
 #include <cmath>
 #include <iostream>
@@ -12,16 +12,6 @@
 #include "Student.cpp"
 #include "Node.cpp"
 using namespace std;
-
-/* Old student Struct. Kept for conversion purposes
-//student struct. no defaults.
-struct Student{
-  char Firstname[11];
-  char Lastname[11];
-  int ID;
-  float GPA;
-};
-*/
 
 
 //signature list
@@ -33,6 +23,7 @@ void deleteStudent(Node* head, int ID);
 void listStudents(Node* head);
 void modStudent(Node* head);
 void averageGPAS(Node* head);
+void printAverage(Node* head, float GPA, int count);
 Student* getStudentByID(int ID,Node* head);
 int getID();
 
@@ -70,7 +61,7 @@ int main(){
     }else if (strcmp(inpstring,"MODIFY")==0){
       //modStudent(head);
     }else if (strcmp(inpstring,"AVERAGE")==0){
-      //averageGPAS(head);
+      averageGPAS(head);
     }else if (strcmp(inpstring,"QUIT")==0){
       notQuit=false;
       //no command needed, just quit the loop.
@@ -249,6 +240,41 @@ void deleteStudent(Node* current, int ID){
   }
 }
 
+void averageGPAS(Node* head){
+  if(head->getStudent()=nullptr){
+    return;
+  }
+  printAverage(head, 0,0);
+}
+
+void printAverage(Node* head, float GPA, int count){
+  GPA+=head->getStudent()->GPA;
+  count+=1;
+  if(head->getNext()=nullptr){
+    cout<<"Number of students: "<<count<<" Average GPA: "<<(GPA/count)<<endl;
+  }else{
+    return printAverage(head->getNext(),GPA,count);
+  }
+}
+
+//for getting IDs.
+int getID(){
+  bool acin=false;
+  int ID;
+  while (acin==false){
+    cout<<"Please Enter Student ID (Serial Integer): "<<endl;
+    cin>>ID;
+    if(cin.fail()){
+      cout<<"I think you did something wrong. please try again."<<endl;
+      cin.clear();
+      cin.ignore(100000,'\n');
+    }else{
+      acin=true;
+    }
+  }
+  return ID;
+}
+
 /*
 ====================================================
 CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
@@ -359,33 +385,5 @@ void modStudent(vector <Student*> & StudentList){
   }
   return;
 }
-
-//for getting index of student in the list
-int getIndex(int ID, vector <Student*> & StudentList){
-  for(auto i = StudentList.begin(); i!=StudentList.end(); ++i){
-    int thisID = (*(*i)).ID;
-    if (thisID==ID){
-      return (i-StudentList.begin());
-    }
-  }
-  return -1;
-}
 */
 
-//for getting IDs.
-int getID(){
-  bool acin=false;
-  int ID;
-  while (acin==false){
-    cout<<"Please Enter Student ID (Serial Integer): "<<endl;
-    cin>>ID;
-    if(cin.fail()){
-      cout<<"I think you did something wrong. please try again."<<endl;
-      cin.clear();
-      cin.ignore(100000,'\n');
-    }else{
-      acin=true;
-    }
-  }
-  return ID;
-}
