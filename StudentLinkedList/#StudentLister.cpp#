@@ -249,6 +249,27 @@ void deleteStudent(Node* current, int ID){
   }
 }
 
+//for getting IDs.
+int getID(){
+  bool acin=false;
+  int ID;
+  while (acin==false){
+    cout<<"Please Enter Student ID (Serial Integer): "<<endl;
+    cin>>ID;
+    if(cin.fail()){
+      cout<<"I think you did something wrong. please try again."<<endl;
+      cin.clear();
+      cin.ignore(100000,'\n');
+    }else{
+      acin=true;
+    }
+  }
+  return ID;
+}
+
+
+
+
 /*
 ====================================================
 CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
@@ -359,33 +380,5 @@ void modStudent(vector <Student*> & StudentList){
   }
   return;
 }
-
-//for getting index of student in the list
-int getIndex(int ID, vector <Student*> & StudentList){
-  for(auto i = StudentList.begin(); i!=StudentList.end(); ++i){
-    int thisID = (*(*i)).ID;
-    if (thisID==ID){
-      return (i-StudentList.begin());
-    }
-  }
-  return -1;
-}
 */
 
-//for getting IDs.
-int getID(){
-  bool acin=false;
-  int ID;
-  while (acin==false){
-    cout<<"Please Enter Student ID (Serial Integer): "<<endl;
-    cin>>ID;
-    if(cin.fail()){
-      cout<<"I think you did something wrong. please try again."<<endl;
-      cin.clear();
-      cin.ignore(100000,'\n');
-    }else{
-      acin=true;
-    }
-  }
-  return ID;
-}
