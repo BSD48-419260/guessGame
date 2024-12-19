@@ -223,15 +223,18 @@ void killStudent(Node* head){
 //Real deleter.clears memory and removes from the list.
 void deleteStudent(Node* current, int ID){
   if(current->getNext()==nullptr){
+    //if we're in the head
     delete current->getStudent();
     current->setStudent(nullptr);
     return;
   }else if(current->getNext()->getStudent()->ID==ID){
+    //take the node out of the loop, then delete it.
     Node* killbuffer = current->getNext();
     current->setNext(current->getNext()->getNext());
     delete killbuffer;
     return;
   }else{
+    //if we can't move on, we should just leave.
     if (current->getNext()->getNext()==nullptr){
       cout<<"ERROR: No student with that ID exists!"<<endl;
     }else {
@@ -240,6 +243,7 @@ void deleteStudent(Node* current, int ID){
   }
 }
 
+//gpa Averager preamble. doesn't actually calculate, just kicks off the process.
 void averageGPAS(Node* head){
   if(head->getStudent()==nullptr){
     return;
@@ -247,6 +251,7 @@ void averageGPAS(Node* head){
   printAverage(head, 0,0);
 }
 
+//actual recursive GPA printer function
 void printAverage(Node* head, float GPA, int count){
   GPA+=head->getStudent()->GPA;
   count+=1;
