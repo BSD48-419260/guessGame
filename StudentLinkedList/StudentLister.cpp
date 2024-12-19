@@ -1,9 +1,9 @@
 /*
- StudentLister Program
- Inteded to work as a prototype database for students
- students are structs kept in student* vector.
+ StudentLister LinkedList Program
+ Inteded to work as a prototype database for students using a linkedlist.
+ the node called 'head' holds the start of the LinkedList
  Made by Elliott VanOrman for Jason Galbraith's C++ C++/Data Structures Class
- 12/7/2024
+ 12/19/2024
  */
 #include <cmath>
 #include <iostream>
@@ -22,6 +22,8 @@ void killStudent(Node* head);
 void deleteStudent(Node* head, int ID);
 void listStudents(Node* head);
 void modStudent(Node* head);
+void modifyStudent(Node* current, int ID);
+void modifyThisStudent(Student* student);
 void averageGPAS(Node* head);
 void printAverage(Node* head, float GPA, int count);
 Student* getStudentByID(int ID,Node* head);
@@ -43,10 +45,13 @@ int main(){
   cout<<" \\_____/ tudent /______\\ ister, /______\\ inked /______\\ ist /______\\ dition."<<endl;
   bool notQuit=true;
   cout<<"(Please note this program is incapable of saving data, so don't actually use it for managing students)"<<endl;
+  char inpstring[8];
   while(notQuit){
     //trying to be robust. Also, Command handler.
     cout<<"Please input a command. (Valid commands: ADD, DELETE, PRINT, MODIFY, AVERAGE, QUIT)"<<endl;
-    char inpstring[8];
+    for(int i=0; i<8; i++){
+      inpstring[i]='\0';
+    }
     cin >> inpstring;
     if(cin.fail()){
       cout<<"I think you did something wrong. please try again."<<endl;
@@ -59,7 +64,7 @@ int main(){
     }else if (strcmp(inpstring,"PRINT")==0){
       listStudents(head);
     }else if (strcmp(inpstring,"MODIFY")==0){
-      //modStudent(head);
+      modStudent(head);
     }else if (strcmp(inpstring,"AVERAGE")==0){
       averageGPAS(head);
     }else if (strcmp(inpstring,"QUIT")==0){
@@ -73,7 +78,7 @@ int main(){
   return 0;
 }
 
-
+//primary string getter, as I was tired of repeating robust input code.
 void getStringFromInput(char* inpstring){
   char bufferarray [11];
   //make sure it works
@@ -223,15 +228,18 @@ void killStudent(Node* head){
 //Real deleter.clears memory and removes from the list.
 void deleteStudent(Node* current, int ID){
   if(current->getNext()==nullptr){
+    //if we're in the head
     delete current->getStudent();
     current->setStudent(nullptr);
     return;
   }else if(current->getNext()->getStudent()->ID==ID){
+    //take the node out of the loop, then delete it.
     Node* killbuffer = current->getNext();
     current->setNext(current->getNext()->getNext());
     delete killbuffer;
     return;
   }else{
+    //if we can't move on, we should just leave.
     if (current->getNext()->getNext()==nullptr){
       cout<<"ERROR: No student with that ID exists!"<<endl;
     }else {
@@ -240,6 +248,7 @@ void deleteStudent(Node* current, int ID){
   }
 }
 
+//gpa Averager preamble. doesn't actually calculate, just kicks off the process.
 void averageGPAS(Node* head){
   if(head->getStudent()==nullptr){
     return;
@@ -247,6 +256,7 @@ void averageGPAS(Node* head){
   printAverage(head, 0,0);
 }
 
+//actual recursive GPA printer function
 void printAverage(Node* head, float GPA, int count){
   GPA+=head->getStudent()->GPA;
   count+=1;
@@ -257,7 +267,7 @@ void printAverage(Node* head, float GPA, int count){
   }
 }
 
-//for getting IDs.
+//for getting IDs. used both when declaring an when searching by
 int getID(){
   bool acin=false;
   int ID;
@@ -281,6 +291,94 @@ CONVERSION TO LINKEDLIST REQUIRED BEYOND THIS POINT!
 ====================================================
 */
 
+//student modifier preamble. 
+void modStudent(Node* head){
+  listStudents(head);
+  if(head->getStudent()==nullptr){
+    return;
+  }
+  int index = getID();
+  if(head->getStudent()->ID==index){
+    modifyThisStudent(head->getStudent());
+    return;
+  }
+  modifyStudent(head,index);
+}
+
+//Student Modifier. not strictly needed, but I have time 
+void modifyStudent(Node* current, int ID){
+  if(current->getNext()->getStudent()->ID==ID){
+    //if we find the kid, modify the kid.
+    modifyThisStudent(current->getNext()->getStudent());
+  }else{
+    //if we can't move on, we should just leave.
+    if (current->getNext()->getNext()==nullptr){
+      cout<<"ERROR: No student with that ID exists!"<<endl;
+    }else {
+      modifyStudent(current->getNext(),ID);
+    }
+  }
+}
+
+//actual individual modification. not recursive, but I feel it to be a complex enough process to warrant it's own function.
+void modifyThisStudent(Student* modKid){
+  bool acin=false;
+  bool notQuit=true;
+  char* inpstring = new char[11];
+  //name getting
+  while(notQuit){
+    //trying to be robust. Also, Command handler.
+    cout<<"Please input which field to modify. (Valid commands: FIRSTNAME, LASTNAME, GPA, CANCEL)\n(Please note, it's only possible to modify ID by deleting and recreating this student.)"<<endl;
+    //that's technically not true. there is a way I could do it, but I think I need to worry more about getting the next, presumably more difficult project finished
+    for(int i=0; i<11; i++){
+      inpstring[i]='\0';
+    }
+    cin >> inpstring;
+    notQuit=false;
+    if(cin.fail()){
+      cout<<"I think you did something wrong. please try again."<<endl;
+      cin.clear();
+      cin.ignore(100000,'\n');
+    }else if (strcmp(inpstring,"FIRSTNAME")==0){
+      cin.clear();
+      cin.ignore(100000,'\n');
+      cout<<"Please input First Name"<<endl;
+      getStringFromInput(inpstring);
+      strncpy(modKid->Firstname,inpstring,11);  
+    }else if (strcmp(inpstring,"LASTNAME")==0){
+      cin.clear();
+      cin.ignore(100000,'\n');
+      cout<<"Please input Last Name"<<endl;
+      getStringFromInput(inpstring);
+      strncpy(modKid->Lastname,inpstring,11);
+    }else if (strcmp(inpstring,"GPA")==0){
+      //GPA getting
+      float newGPA;
+      acin=false;
+      while (acin==false){
+	cout<<"Please Enter GPA: "<<endl;
+	cin>>newGPA;
+	if(cin.fail()){
+	  cout<<"I think you did something wrong. please try again."<<endl;
+	  cin.clear();
+	  cin.ignore(100000,'\n');
+	}else{
+	  acin=true;
+	}
+      }
+      acin=false;
+      modKid->GPA=newGPA;
+    }else if (strcmp(inpstring,"CANCEL")==0){
+      //NotQuit already set to false
+      //no command needed, just quit the loop.
+    }else{
+      notQuit=true;
+      cout<<"Invalid Command."<<endl;
+    }
+  }
+  delete[] inpstring;
+  return;
+}
 
 /*
 
