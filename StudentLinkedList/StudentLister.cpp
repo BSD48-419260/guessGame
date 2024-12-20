@@ -10,7 +10,7 @@
 #include <vector>
 #include <cstring>
 #include "Student.cpp"
-#include "Node.cpp"
+#include "Node.o"
 using namespace std;
 
 
@@ -28,10 +28,10 @@ void averageGPAS(Node* head);
 void printAverage(Node* head, float GPA, int count);
 Student* getStudentByID(int ID,Node* head);
 int getID();
-
+ 
 
 int main(){
-  Node * head = new Node();
+  Node * head = new Node(nullptr);
   //opening scrawl
   cout<<"==========================="<<endl;
   cout<<"Welcome to:"<<endl;
@@ -169,7 +169,9 @@ Student* getStudentByID(int ID,Node* head){
 //actual student adding logic. above code is just data gathering
 void linearAdd(Node* current, Node* addme){
   if (current->getStudent()==nullptr){
-    current->setStudent(addme->getStudent());
+    delete current;
+    current=new Node(addme->getStudent());
+      //current->setStudent(addme->getStudent());
     addme->setStudent(nullptr);
     delete addme;
   }else if (current->getStudent()->ID > addme->getStudent()->ID){

@@ -1,37 +1,27 @@
-#include "Student.h"
-#include "Node.h"
+//Note: this code was programmed by one Sriram Subramanian, for use in mr Galbraith's c++ class
+#include <iostream>
+#include "node.h"
 
-Node::Node(){
-  refrencedStudent=nullptr;
-  next=nullptr;
+using namespace std;
+
+Node::Node(Student* argdata) {
+    data = argdata;
 }
 
-Node::Node(Student* newkid){
-  refrencedStudent=newkid;
-  next=nullptr;
+Node::~Node() {
+    delete data;
+    data = nullptr;
 }
 
-Node::Node(Student* newkid, Node*& newNext){
-  refrencedStudent=newkid;
-  next=newNext;
+Node* Node::getNext() {
+    return link;
 }
 
-Node::~Node(){
-  delete refrencedStudent;
+Student* Node::getStudent() {
+    return data;
+
 }
 
-Node* Node::getNext(){
-  return next;
-}
-
-void Node::setNext(Node* newNext){
-  next=newNext;
-}
-
-Student* Node::getStudent(){
-  return refrencedStudent;
-}
-
-void Node::setStudent(Student* newStudent){
-  refrencedStudent=newStudent;
+void Node::setNext(Node* arglink) {
+   link = arglink; 
 }
