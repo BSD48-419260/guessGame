@@ -10,7 +10,7 @@
 #include <vector>
 #include <cstring>
 #include "Student.cpp"
-#include "Node.o"
+#include "Node.h"
 using namespace std;
 
 
@@ -147,6 +147,7 @@ void addStudent(Node* head){
   acin=false;
   newkid->GPA=newGPA;
   Node* addme = new Node(newkid);
+  addme->setNext(nullptr);
   linearAdd(head,addme);
   return;
 }
@@ -171,15 +172,18 @@ void linearAdd(Node* current, Node* addme){
   if (current->getStudent()==nullptr){
     delete current;
     current=new Node(addme->getStudent());
+    current->setNext(nullptr);
       //current->setStudent(addme->getStudent());
-    addme->setStudent(nullptr);
+    addme =new Node(nullptr);
     delete addme;
   }else if (current->getStudent()->ID > addme->getStudent()->ID){
-    addme->setNext(current->getNext());
-    current->setNext(addme);
-    Student* buffer = current->getStudent();
-    current->setStudent(addme->getStudent());
-    addme->setStudent(buffer);
+    Node* nextBuffer = current->getNext();
+    Node* newAdd = new Node(current->getStudent());
+    current = new Node(addme->getStudent());
+    current->setNext(newAdd);
+    newAdd->setNext(nextBuffer);
+    addme->setNext(nullptr);
+    delete addme;
   }else if (current->getNext()==nullptr){
     current->setNext(addme);
   }else if ((current->getStudent()->ID < addme->getStudent()->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent()->ID)){
@@ -213,14 +217,15 @@ void killStudent(Node* head){
   if(head->getStudent()->ID==index){
     if(head->getNext()!=nullptr){
       Student* buffer = head->getStudent();
-      head->setStudent(head->getNext()->getStudent());
-      head->getNext()->setStudent(buffer);
-      Node* killbuffer = head->getNext();
-      head->setNext(head->getNext()->getNext());
-      delete killbuffer;
+      Node* afterhead = head->getNext();
+      delete head;
+      head = new Node(afterhead->getStudent());
+      head->setNext(afterhead->getNext());
+      afterhead = new Node(buffer);
+      delete afterhead;
     }else{
       delete head->getStudent();
-      head->setStudent(nullptr);
+      head = new Node(nullptr);
     }
     return;
   }
@@ -232,7 +237,7 @@ void deleteStudent(Node* current, int ID){
   if(current->getNext()==nullptr){
     //if we're in the head
     delete current->getStudent();
-    current->setStudent(nullptr);
+    current = new Node(nullptr);
     return;
   }else if(current->getNext()->getStudent()->ID==ID){
     //take the node out of the loop, then delete it.
