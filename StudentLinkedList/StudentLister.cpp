@@ -16,8 +16,8 @@ using namespace std;
 
 //signature list
 void getStringFromInput(char* inpstring);
-void addStudent(Node* head);
-void linearAdd(Node* current, Node* addme);
+void addStudent(Node*& head);
+void linearAdd(Node*& head, Node* current, Node* addme);
 void killStudent(Node* head);
 void deleteStudent(Node* head, int ID);
 void listStudents(Node* head);
@@ -105,7 +105,7 @@ void getStringFromInput(char* inpstring){
 }
 
 //student adding command. Despite name, actuall adding logic sits in linearAdd function. this one just gets all the information
-void addStudent(Node* head){
+void addStudent(Node*& head){
   Student* newkid = new Student();
   bool acin=false;
   //name getting
@@ -148,7 +148,7 @@ void addStudent(Node* head){
   newkid->GPA=newGPA;
   Node* addme = new Node(newkid);
   addme->setNext(nullptr);
-  linearAdd(head,addme);
+  linearAdd(head,head,addme);
   return;
 }
 
@@ -168,7 +168,7 @@ Student* getStudentByID(int ID,Node* head){
 }
 
 //actual student adding logic. above code is just data gathering
-void linearAdd(Node* current, Node* addme){
+void linearAdd(Node*& head, Node* current, Node* addme){
   if (current->getStudent()==nullptr){
     delete current;
     current=new Node(addme->getStudent());
@@ -176,21 +176,16 @@ void linearAdd(Node* current, Node* addme){
       //current->setStudent(addme->getStudent());
     addme =new Node(nullptr);
     delete addme;
-  }else if (current->getStudent()->ID > addme->getStudent()->ID){
-    Node* nextBuffer = current->getNext();
-    Node* newAdd = new Node(current->getStudent());
-    current = new Node(addme->getStudent());
-    current->setNext(newAdd);
-    newAdd->setNext(nextBuffer);
-    addme->setNext(nullptr);
-    delete addme;
+  }else if (head->getStudent()->ID > addme->getStudent()->ID){
+    head = addme;
+    head->setNext(current);
   }else if (current->getNext()==nullptr){
     current->setNext(addme);
   }else if ((current->getStudent()->ID < addme->getStudent()->ID)&&(current->getNext()->getStudent()->ID > addme->getStudent()->ID)){
     addme->setNext(current->getNext());
     current->setNext(addme);
   }else{
-    linearAdd(current->getNext(), addme);
+    linearAdd(head, current->getNext(), addme);
   }
 }
 
@@ -386,109 +381,4 @@ void modifyThisStudent(Student* modKid){
   delete[] inpstring;
   return;
 }
-
-/*
-
-//student modifier. because why not?
-void modStudent(vector <Student*> & StudentList){
-  listStudents(StudentList);
-  int index = getIndex(getID(StudentList),StudentList);
-  if(index==-1){
-    cout<<"INVALID ID"<<endl;
-  }
-  bool lacin=false;
-  //almost all of these are copied directly from the AddStudent function.
-  while (lacin==false){
-    cout<<"Field to Modify. (Valid commands: FIRSTNAME, LASTNAME, ID, GPA, NEVERMIND)"<<endl;
-    char linpstring[10];
-    cin >> linpstring;
-    lacin=true;
-    bool acin=false;
-    //Commands should be pretty clear on what is being modified.
-    if(cin.fail()){
-      cout<<"I think you did something wrong. please try again."<<endl;
-      cin.clear();
-      cin.ignore(100000,'\n');
-      lacin=false;
-    }else if (strcmp(linpstring,"FIRSTNAME")==0){
-      char inpstring[11];
-      for(int i=0; i<11; i++){
-	inpstring[i]='\0';
-      }
-      cin.ignore(100000,'\n');
-      while (acin==false){
-	cout<<"Please Enter Firstname (10 characters or less): "<<endl;
-	cin.getline(inpstring,sizeof(inpstring));
-	if(cin.fail()){
-	  cout<<"I think you did something wrong. please try again."<<endl;
-	  cin.clear();
-	  cin.ignore(100000,'\n');
-	}else{
-	  acin=true;
-	}
-      }
-      for(int i=0; i<10; i++){
-	(**(StudentList.begin()+index)).Firstname[i]=inpstring[i];
-      }
-      (**(StudentList.begin()+index)).Firstname[10]='\0';
-    }else if (strcmp(linpstring,"LASTNAME")==0){
-      char inpstring[11];
-      for(int i=0; i<11; i++){
-	inpstring[i]='\0';
-      }
-      cin.ignore(100000,'\n');
-      while (acin==false){
-	cout<<"Please Enter Lastname (10 characters or less): "<<endl;
-	cin.getline(inpstring,sizeof(inpstring));
-	if(cin.fail()){
-	  cout<<"I think you did something wrong. please try again."<<endl;
-	  cin.clear();
-	  cin.ignore(100000,'\n');
-	}else{
-	  acin=true;
-	}
-      }
-      for(int i=0; i<10; i++){
-	(**(StudentList.begin()+index)).Lastname[i]=inpstring[i];
-      }
-      (**(StudentList.begin()+index)).Lastname[10]='\0';
-    }else if (strcmp(linpstring,"ID")==0){
-      int posid;
-      acin=false;
-      while(acin==false){
-	posid=getID(StudentList);
-	if(getIndex(posid,StudentList)==-1){
-	  acin=true;
-	}else{
-	  cout<<"A student with that ID already exists!"<<endl;
-	}
-      }
-      (**(StudentList.begin()+index)).ID=posid;
-    }else if (strcmp(linpstring,"GPA")==0){
-      float newGPA;
-      acin=false;
-      while (acin==false){
-	cout<<"Please Enter GPA: "<<endl;
-	cin>>newGPA;
-	if(cin.fail()){
-	  cout<<"I think you did something wrong. please try again."<<endl;
-	  cin.clear();
-	  cin.ignore(100000,'\n');
-	}else{
-	  acin=true;
-	}
-      }
-      acin=false;
-      (**(StudentList.begin()+index)).GPA=newGPA;
-    }else if (strcmp(linpstring,"NEVERMIND")==0){
-      return;
-      //no command needed, just quit the function.
-    }else{
-      cout<<"Invalid Command."<<endl;
-      lacin=false;
-    }
-  }
-  return;
-}
-*/
 
